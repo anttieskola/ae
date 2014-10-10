@@ -17,7 +17,11 @@ namespace AE.Users.Dal
         public UserContext()
             : base("DbConnection")
         {
+        }
 
+        static UserContext()
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<UserContext, Migrations.Configuration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

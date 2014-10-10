@@ -17,6 +17,11 @@ namespace AE.Mpg.Dal
         {
         }
 
+        static MpgContext()
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MpgContext, Migrations.Configuration>());
+        }
+
         protected override void OnModelCreating(DbModelBuilder mb)
         {
             mb.HasDefaultSchema("mpg");
