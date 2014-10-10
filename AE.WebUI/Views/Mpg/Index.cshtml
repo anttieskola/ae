@@ -1,0 +1,61 @@
+﻿@using AE.Mpg.Entity
+@using AE.WebUI.Models
+@model MpgViewModel
+
+@{
+    ViewBag.Title = "Mpg";
+}
+
+<div class="col-lg-12" style="margin-top: 20px;">
+    <select id="carId" class="form-control">
+        @foreach (Car c in Model.Cars)
+        {
+            if (c.CarId == Model.Selected)
+            {
+                <option selected="selected" value="@c.CarId">@c.Make @c.Model</option>
+            }
+            else
+            {
+                <option value="@c.CarId">@c.Make @c.Model</option>
+            }
+        }
+    </select>
+
+</div>
+
+<div id="fills" class="col-lg12" style="margin-top: 20px;">
+    <div id="circularG" class="center-block">
+        <div id="circularG_1" class="circularG">
+        </div>
+        <div id="circularG_2" class="circularG">
+        </div>
+        <div id="circularG_3" class="circularG">
+        </div>
+        <div id="circularG_4" class="circularG">
+        </div>
+        <div id="circularG_5" class="circularG">
+        </div>
+        <div id="circularG_6" class="circularG">
+        </div>
+        <div id="circularG_7" class="circularG">
+        </div>
+        <div id="circularG_8" class="circularG">
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // load fills
+        function loadFills()
+        {
+            var id = $('#carId').val();
+            $('#fills').load('@Url.Action("Fills")' + '/' + id);
+        }
+        // doc rdy
+        $(function () {
+            $('#carId').change(loadFills);
+            loadFills();
+        });
+    </script>
+}

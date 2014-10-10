@@ -1,0 +1,10 @@
+﻿@using (Html.BeginForm("Upload", "Blog", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="file">Picture</label>
+        <input type="file" name="file" id="file" />
+        <p class="help-block">No picture uploaded.</p>
+        <button class="btn btn-info btn-xs" type="submit">Upload</button>
+    </div>
+}

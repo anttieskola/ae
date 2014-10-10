@@ -1,0 +1,60 @@
+﻿@using AE.News.Entity
+@model IEnumerable<NewsArticle>
+
+<div class="row">
+    @foreach (var a in Model)
+    {
+        <article id="@a.Id"
+                 class="col-sm-12 col-lg-6"
+                 style="margin-bottom: 20px;">
+            <div class="col-sm-12 col-lg-12"
+                 style="margin-bottom: 8px;">
+                <div class="row well well-sm"
+                     onclick="expandArticle(this);"
+                     style="cursor: pointer;">
+                    <div class="col-xs-10">
+                        <h4>@a.Title</h4>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4>
+                            <span class="glyphicon glyphicon-chevron-down news-expander">
+                            </span>
+                        </h4>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4>
+                            <a target="_blank" href="@Url.Action("ReadingView", new { articleId = a.Id })">
+                                <span class="glyphicon glyphicon-book"></span>
+                            </a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row pull-right">
+                    @a.Date
+            </div>
+            @if (a.Image == null)
+            {
+                // no picture
+                <div class="col-sm-12 col-lg-12">
+                    <p>@a.Description</p>
+                </div>
+            }
+            else
+            {
+                // picture and description
+                <div class="col-sm-12 col-lg-6">
+                    <img src="@a.Image" width="265" height="149" />
+                </div>
+
+                <div class="col-sm-12 col-lg-6">
+                    <p>@a.Description</p>
+                </div>
+            }
+            <div class="col-sm-12 col-lg-12 news-content">
+                @Html.Raw(@a.Content)
+                <a href="@a.Source">Source</a>
+            </div>
+        </article>
+    }
+</div>

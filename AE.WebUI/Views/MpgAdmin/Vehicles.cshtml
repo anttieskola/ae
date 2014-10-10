@@ -1,0 +1,35 @@
+﻿@using AE.Mpg.Entity
+@model IEnumerable<Vehicle>
+
+@{
+    ViewBag.Title = "Vehicles";
+}
+
+<table class="table table-striped" style="margin-top: 25px;">
+    <tr>
+        <th>Make</th>
+        <th>Year</th>
+        <th>Model</th>
+        <th>Engine</th>
+        <th>Fuel</th>
+        <th>Private</th>
+        <th>User</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (Vehicle v in Model)
+    {
+        <tr>
+            <th>@v.Make</th>
+            <th>@v.ManufacturingYear</th>
+            <th>@v.Model</th>
+            <th>@v.Engine</th>
+            <th>@v.Fuel.Name</th>
+            <th>@v.Private</th>
+            <th>@v.User</th>
+            <th>
+                <button class="btn btn-info btn-xs">Edit</button>
+                <button class="btn btn-danger btn-xs">Delete</button>
+            </th>
+        </tr>
+    }
+</table>

@@ -1,0 +1,46 @@
+﻿@using AE.News.Entity
+@model NewsArticle
+
+@{
+    Layout = null;
+}
+@* http://ie.microsoft.com/testdrive/browser/readingview/ *@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    @Styles.Render("~/bundles/css")
+</head>
+<body style="padding: 20px;">
+    <div class="row">
+        <div class="col-xs-9 dateline">
+            @Model.Date
+        </div>
+        <div class="col-xs-3 pull-left">
+            <a href="#" onclick="window.close();">Close</a>
+        </div>
+    </div>
+    <div class="row text-center">
+        <h3>@Model.Title</h3>
+    </div>
+    @if (Model.Image != null)
+    {
+        <figure class="row text-center">
+            <img src="@Model.Image" width="400" height="225" />
+            <figcaption>Picture</figcaption>
+        </figure>
+    }
+    <div class="row">
+        <p>@Model.Description</p>
+    </div>
+    <div class="row">
+        @Html.Raw(@Model.Content)
+    </div>
+    <div class="row">
+        <a href="@Model.Source">Source</a>
+    </div>
+    @Scripts.Render("~/bundles/js")
+</body>
+</html>

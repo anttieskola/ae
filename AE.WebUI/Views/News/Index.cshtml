@@ -1,0 +1,135 @@
+﻿@using AE.WebUI.Models
+@model NewsViewModel
+
+@{
+    ViewBag.Title = "News";
+}
+
+<!-- news source selection -->
+<nav class="navbar-fixed-bottom">
+    <div class="hidden-xs hidden-sm col-md-3 col-lg-5">
+        <button id="about" class="btn btn-info">About</button>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7">
+        <form class="form-inline" role="form">
+            <div class="input-group">
+                <label for="source" class="input-group-addon my-form-control">Category</label>
+                <select id="source" class="my-form-control">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        if (Model.Tag.Equals(tag))
+                        {
+                            <option selected="selected" value="@tag">@tag</option>
+                        }
+                        else
+                        {
+                            <option value="@tag">@tag</option>
+                        }
+                    }
+                    <option value="*">Everything</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</nav>
+
+<!-- about modal dialog -->
+<div class="modal fade" id="aboutModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">About news section</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Source for the news are <a href="http://yle.fi" target="_blank">YLE</a> RSS <a href="http://yle.fi/uutiset/rss-syotteet/6075085" target="_blank">feeds</a>
+                </p>
+                <p>
+                    This is a razor page in a ASP MVC application.
+                    Separate class library implements RSS feed reader and daemon type of functionality which stores news into memory and updates them reguraly.
+                    It will keep news in memory until one month old. Server restart will wipe it also.
+                    When user selects a different category JQuery ajax call uses specific controller action to provide partial page with the news of selected category.
+                </p>
+                <p>
+                    In future I might add an admin interface to modify feeds used.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- wheel -->
+<div id="wheel" class="row" style="padding-bottom: 10px;">
+    <div id="circularG" class="center-block">
+        <div id="circularG_1" class="circularG">
+        </div>
+        <div id="circularG_2" class="circularG">
+        </div>
+        <div id="circularG_3" class="circularG">
+        </div>
+        <div id="circularG_4" class="circularG">
+        </div>
+        <div id="circularG_5" class="circularG">
+        </div>
+        <div id="circularG_6" class="circularG">
+        </div>
+        <div id="circularG_7" class="circularG">
+        </div>
+        <div id="circularG_8" class="circularG">
+        </div>
+    </div>
+</div>
+
+<!-- news listing -->
+<div id="news" class="row" style="padding-bottom: 10px;">
+</div>
+
+@section scripts {
+    <script>
+        // article show/hide
+        function expandArticle(element) {
+            var article = $(element).parents('article');
+            var content = article.children('.news-content');
+            var glyph = article.find('.news-expander');
+            if (glyph.hasClass('glyphicon-chevron-down')) {
+                glyph.removeClass('glyphicon-chevron-down');
+                glyph.addClass('glyphicon-chevron-up');
+                content.show();
+            }
+            else {
+                glyph.removeClass('glyphicon-chevron-up');
+                glyph.addClass('glyphicon-chevron-down');
+                content.hide();
+            }
+        }
+
+        // load news of given source id
+        function loadNews(forceRefresh) {
+            var loadNewsUrl = '@Url.Action("News")' + '?tag=' + encodeURIComponent($('#source').val());
+            $('#news').hide();
+            $('#wheel').show();
+            $('#news').load(loadNewsUrl,
+                    function () {
+                        window.scroll(0, 0); // scroll to top, as articles have changed
+                        $('.news-content').toggle(); // hide all contents
+                        $('#wheel').hide();
+                        $('#news').show();
+                    });
+        };
+
+        function showAbout() {
+            $('#aboutModal').modal('show');
+        };
+
+        // doc rdy
+        $(function () {
+            $('#source').change(function () { loadNews(false); }); // listener to load different source
+            $('#about').on('click', showAbout);
+            loadNews(); // initial load
+        });
+    </script>
+}

@@ -1,0 +1,11 @@
+﻿@using AE.Mpg.Entity
+@model IEnumerable<Fill>
+
+@{
+    ViewBag.Title = "Fills";
+}
+
+@foreach(Fill f in Model)
+{
+    @f.Mileage
+}
