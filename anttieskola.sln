@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Mpg", "AE.Mpg\AE.Mpg.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Users", "AE.Users\AE.Users.csproj", "{EC97634A-8F7F-4F7B-ABE9-F22644311B72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Insomnia", "AE.Insomnia\AE.Insomnia.csproj", "{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,16 @@ Global
 		{EC97634A-8F7F-4F7B-ABE9-F22644311B72}.Release|ARM.ActiveCfg = Release|Any CPU
 		{EC97634A-8F7F-4F7B-ABE9-F22644311B72}.Release|x64.ActiveCfg = Release|Any CPU
 		{EC97634A-8F7F-4F7B-ABE9-F22644311B72}.Release|x86.ActiveCfg = Release|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|ARM.ActiveCfg = Release|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|x64.ActiveCfg = Release|Any CPU
+		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

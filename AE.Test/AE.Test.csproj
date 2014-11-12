@@ -91,7 +91,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test_News_NewsContext.cs" />
-    <Compile Include="Test_News_NewsDaemon.cs" />
     <Compile Include="Test_News_YleFeeds.cs" />
     <Compile Include="Test_WebUI_MpgAdmin.cs" />
   </ItemGroup>

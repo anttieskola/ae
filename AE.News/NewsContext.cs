@@ -55,7 +55,7 @@ namespace AE.News
         private static async Task<NewsContext> Setup()
         {
             NewsContext nc = new NewsContext();
-            await nc.Update();
+            await nc.Maintenance();
             return nc;
         }
 
@@ -75,13 +75,17 @@ namespace AE.News
         }
         #endregion
 
-        #region internal update job
+        #region update job
         /// <summary>
-        /// Update news db
+        /// Maintain news DB
         /// </summary>
         /// <returns></returns>
-        internal async Task Update()
+        public async Task Maintenance()
         {
+            // clean old
+            _db.RemoveAll(a => (a.Date.CompareTo(DateTime.Now.AddDays(maxArticleAgeInDays)) < 0));
+
+            // fetch new
             foreach (var feed in _feeds)
             {
                 foreach (var article in await feed.Fetch())
@@ -103,11 +107,7 @@ namespace AE.News
                     }
                 }
             }
-        }
-
-        internal void Cleanup()
-        {
-            _db.RemoveAll(a => (a.Date.CompareTo(DateTime.Now.AddDays(maxArticleAgeInDays)) < 0));
+            Debug.WriteLine("NewsContext - Maintenance - Complete - ArticleCount: {0}", _db.Count());
         }
         #endregion
 

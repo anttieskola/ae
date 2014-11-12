@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AE.Mpg")]
+[assembly: AssemblyTitle("AE.Insomnia")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AE.Mpg")]
+[assembly: AssemblyProduct("AE.Insomnia")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fccdf2a8-3e65-4b71-a635-583055096fd5")]
+[assembly: Guid("e03f5814-1520-4509-a949-009e86337ef3")]
 
 // Version information for an assembly consists of the following four values:
 //

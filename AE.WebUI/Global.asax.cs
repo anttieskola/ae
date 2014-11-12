@@ -1,8 +1,10 @@
-﻿using AE.News;
+﻿using AE.Insomnia;
+using AE.News;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -20,25 +22,12 @@ namespace AE.WebUI
         /// <param name="e"></param>
         protected void Application_Start(object sender, EventArgs e)
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            // news updater
-            if (!NewsDaemon.Instance.Start())
-            {
-                throw new Exception("NewsUpdate job fails to launch.");
-            }
-        }
-
-        /// <summary>
-        /// cleaning up app resources
-        /// </summary>
-        public override void Dispose()
-        {
-            NewsDaemon.Instance.Stop();
-            base.Dispose();
+            InsomniaDaemon.Instance.Start();
         }
     }
 }
