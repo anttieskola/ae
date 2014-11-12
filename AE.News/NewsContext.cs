@@ -82,8 +82,8 @@ namespace AE.News
         /// <returns></returns>
         public async Task Maintenance()
         {
-            // clean old
-            _db.RemoveAll(a => (a.Date.CompareTo(DateTime.Now.AddDays(maxArticleAgeInDays)) < 0));
+            // clean old, TODO: fix this
+            //_db.RemoveAll(a => (a.Date.CompareTo(DateTime.Now.AddDays(maxArticleAgeInDays)) < 0));
 
             // fetch new
             foreach (var feed in _feeds)
@@ -96,6 +96,7 @@ namespace AE.News
                         article.Id = _lastId;
                         _lastId++;
                         _db.Add(article);
+
                         // pickup tag to list if new
                         foreach (var tag in article.Tag)
                         {
@@ -139,6 +140,7 @@ namespace AE.News
 
     }
 
+    #region lazy constructor
     /// <summary>
     /// Lazy object with asynchronous constructor
     /// </summary>
@@ -155,6 +157,7 @@ namespace AE.News
             return Value.GetAwaiter();
         }
     }
+    #endregion
 }
 
 

@@ -15,14 +15,14 @@ namespace AE.Insomnia
     public class InsomniaDaemon
     {
         /* azure */
-        //public const double UPDATE_INTERVAL_IN_MINUTES = 10;
-        //public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
-        //public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
+        public const double UPDATE_INTERVAL_IN_MINUTES = 10;
+        public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
+        public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
 
         /* dev */
-        public const double UPDATE_INTERVAL_IN_MINUTES = 0.2;
-        public const String API_URI = "http://localhost:65431/api/MakeRequest";
-        public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
+        //public const double UPDATE_INTERVAL_IN_MINUTES = 1;
+        //public const String API_URI = "http://localhost:65431/api/MakeRequest";
+        //public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
 
 
         private IScheduler _scheduler;
@@ -67,8 +67,16 @@ namespace AE.Insomnia
         public async Task Maintenance()
         {
             Debug.WriteLine("InsomniaDaemon - Maintenance");
-            NewsContext nc = await NewsContext.GetInstance();
-            await nc.Maintenance();
+            // wrap maintenance so it won't prevent us from going on
+            try
+            {
+                NewsContext nc = await NewsContext.GetInstance();
+                await nc.Maintenance();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("InsomniaDeamon - Maintenance - Fatal exception: {0}", e.Message);
+            }
             Start();
         }
 
@@ -92,7 +100,7 @@ namespace AE.Insomnia
         /// Current not used as can't call this from httpapplication dispose
         /// as it is called few seconds after startup.
         /// </summary>
-        public void  Stop()
+        public void Stop()
         {
             Debug.WriteLine("InsomniaDaemon - Stop");
             if (_scheduler != null)
@@ -114,19 +122,34 @@ namespace AE.Insomnia
         public async void Execute(IJobExecutionContext context)
         {
             Debug.WriteLine("InsomniaApiRequest - Execute");
-            var req = (HttpWebRequest)WebRequest.Create(InsomniaDaemon.API_URI);
-            req.ContentType = "application/json; charset=utf-8";
-            req.Method = "POST";
-            using (var sw = new StreamWriter(req.GetRequestStream()))
+            try
             {
-                sw.Write("{\"url\":\""+ InsomniaDaemon.CALLBACK_URI +"\"}");
-                sw.Flush();
-                sw.Close();
+                var req = (HttpWebRequest)WebRequest.Create(InsomniaDaemon.API_URI);
+                req.ContentType = "application/json; charset=utf-8";
+                req.Method = "POST";
+                using (var sw = new StreamWriter(req.GetRequestStream()))
+                {
+                    sw.Write("{\"url\":\"" + InsomniaDaemon.CALLBACK_URI + "\"}");
+                    sw.Flush();
+                    sw.Close();
+                }
+                var res = (HttpWebResponse)await req.GetResponseAsync();
+                if (res.StatusCode != HttpStatusCode.OK)
+                {
+                    Debug.WriteLine("InsomniaApiRequest - Execute - ResponseError, StatusCode: {0}", res.StatusCode);
+                }
             }
-            var res = (HttpWebResponse) await req.GetResponseAsync();
-            if (res.StatusCode != HttpStatusCode.OK)
+            catch (UriFormatException) 
             {
-                Debug.WriteLine("InsomniaApiRequest - Execute - ResponseError, StatusCode: {0}", res.StatusCode);
+                // invalid api uri, can't recover from this.
+                Debug.WriteLine("InsomniaApiRequest - Execute - Fatal error, invalid api url");
+            }
+            catch (WebException)
+            {
+                // can't access server
+                Debug.WriteLine("InsomniaApiRequest - Execute - Can't access api server");
+                // making new request
+                InsomniaDaemon.Instance.Start();
             }
         }
     }

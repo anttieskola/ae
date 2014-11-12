@@ -34,9 +34,7 @@ namespace AE.News
                         // already have it, add tag to first
                         all.First(a => a.Hash == article.Hash).Tag.Add(feed.Tag);
                     }
-
                 }
-
             }
             return all;
         }
@@ -75,80 +73,86 @@ namespace AE.News
 
         private async Task<IEnumerable<NewsArticle>> FetchFeed(NewsFeed feed)
         {
-            // get rss feed
-            WebRequest req = WebRequest.Create(feed.Uri);
-            WebResponse response = await req.GetResponseAsync();
-            XDocument xml = XDocument.Load(response.GetResponseStream());
-            // pickup only item's (news articles)
-            var data = from item in xml.Descendants("item")
-                       select item;
-            // create list of em
             List<NewsArticle> news = new List<NewsArticle>();
-            foreach (var d in data)
+            try
             {
-                NewsArticle a = new NewsArticle();
-                // title
-                if (d.Element("title") != null)
+                // get rss feed
+                WebRequest req = WebRequest.Create(feed.Uri);
+                WebResponse response = await req.GetResponseAsync();
+                XDocument xml = XDocument.Load(response.GetResponseStream());
+                // pickup only item's (news articles)
+                var data = from item in xml.Descendants("item")
+                           select item;
+                // create list of em
+                foreach (var d in data)
                 {
-                    a.Title = d.Element("title").Value;
-                }
-                // description
-                if (d.Element("description") != null)
-                {
-                    a.Description = d.Element("description").Value;
-                }
-                // date
-                if (d.Element("pubDate") != null)
-                {
-                    // <pubDate>Thu, 9 Oct 2014 13:22:17 +0300</pubDate>
-                    // http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
-                    const string format = "ddd, d MMM yyyy HH:mm:ss zzz";
-                    try
+                    NewsArticle a = new NewsArticle();
+                    // title
+                    if (d.Element("title") != null)
                     {
-                        a.Date = DateTime.ParseExact(d.Element("pubDate").Value, format, CultureInfo.InvariantCulture);
+                        a.Title = d.Element("title").Value;
                     }
-                    catch (FormatException e)
+                    // description
+                    if (d.Element("description") != null)
                     {
-                        Debug.WriteLine(e.Message);
+                        a.Description = d.Element("description").Value;
+                    }
+                    // date
+                    if (d.Element("pubDate") != null)
+                    {
+                        // <pubDate>Thu, 9 Oct 2014 13:22:17 +0300</pubDate>
+                        // http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
+                        const string format = "ddd, d MMM yyyy HH:mm:ss zzz";
+                        try
+                        {
+                            a.Date = DateTime.ParseExact(d.Element("pubDate").Value, format, CultureInfo.InvariantCulture);
+                        }
+                        catch (FormatException e)
+                        {
+                            Debug.WriteLine(e.Message);
+                            a.Date = DateTime.Now;
+                        }
+                    }
+                    else
+                    {
                         a.Date = DateTime.Now;
                     }
-                }
-                else
-                {
-                    a.Date = DateTime.Now;
-                }
-                // content
-                if (d.Element(XName.Get("encoded", "http://purl.org/rss/1.0/modules/content/")) != null)
-                    a.Content = d.Element(XName.Get("encoded", "http://purl.org/rss/1.0/modules/content/")).Value;
-                // image
-                if (d.Element("enclosure") != null && d.Element("enclosure").HasAttributes)
-                {
-                    string imageUrl = (string)d.Element("enclosure").Attribute("url");
-                    try
+                    // content
+                    if (d.Element(XName.Get("encoded", "http://purl.org/rss/1.0/modules/content/")) != null)
+                        a.Content = d.Element(XName.Get("encoded", "http://purl.org/rss/1.0/modules/content/")).Value;
+                    // image
+                    if (d.Element("enclosure") != null && d.Element("enclosure").HasAttributes)
                     {
-                        a.Image = new Uri(imageUrl);
+                        string imageUrl = (string)d.Element("enclosure").Attribute("url");
+                        try
+                        {
+                            a.Image = new Uri(imageUrl);
+                        }
+                        catch (AggregateException)
+                        {
+                            a.Image = null;
+                        }
                     }
-                    catch (AggregateException)
-                    {
-                        a.Image = null;
-                    }
-                }
 
-                // link to whole story
-                if (d.Element("guid") != null)
-                {
-                    try
+                    // link to whole story
+                    if (d.Element("guid") != null)
                     {
-                        a.Source = new Uri(d.Element("guid").Value);
-                    }
-                    catch (AggregateException)
-                    {
+                        try
+                        {
+                            a.Source = new Uri(d.Element("guid").Value);
+                        }
+                        catch (AggregateException)
+                        {
 
+                        }
                     }
+                    a.Tag.Add(feed.Tag);
+                    a.Hash = a.Content.GetHashCode();
+                    news.Add(a);
                 }
-                a.Tag.Add(feed.Tag);
-                a.Hash = a.Content.GetHashCode();
-                news.Add(a);
+            } catch (Exception e)
+            {
+                Debug.WriteLine("YleFeeds - FetchFeed - Fatal exception: {0}", e.Message);
             }
             return news;
         }
