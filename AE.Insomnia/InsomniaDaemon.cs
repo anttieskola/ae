@@ -1,6 +1,7 @@
 ﻿using AE.News;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace AE.Insomnia
 {
+    /// <summary>
+    /// daemon to start and keep one maintenance job running all the time
+    /// thats why you find lot of defensive programming here.
+    /// </summary>
     public class InsomniaDaemon
     {
 #if DEBUG
@@ -25,8 +30,9 @@ namespace AE.Insomnia
         public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
         public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
 #endif
+        private const String JOB_PREFIX = "ID_JOB_";
+        private const String TRIGGER_PREFIX = "ID_TRIGGER_";
         private IScheduler _scheduler;
-
         #region lazy singleton
         private static readonly Lazy<InsomniaDaemon> lazy =
             new Lazy<InsomniaDaemon>(() => new InsomniaDaemon());
@@ -70,6 +76,7 @@ namespace AE.Insomnia
             // wrap maintenance so it won't prevent us from going on
             try
             {
+                // TODO: Add more maintenance tasks here
                 NewsContext nc = await NewsContext.GetInstance();
                 await nc.Maintenance();
             }
@@ -86,13 +93,10 @@ namespace AE.Insomnia
         public void Start()
         {
             Debug.WriteLine("InsomniaDaemon - Start");
-            String label = DateTime.Now.Ticks.ToString(); // required as this job is created inside other job
-            IJobDetail iJob = JobBuilder.Create<InsomniaApiRequest>().WithIdentity("ID_JOB_" + label).Build();
-            ITrigger iTrigger = TriggerBuilder.Create()
-                .WithIdentity("ID_TRIGGER_" + label)
-                .StartAt(DateTimeOffset.Now.AddMinutes(UPDATE_INTERVAL_IN_MINUTES))
-                .Build();
-            _scheduler.ScheduleJob(iJob, iTrigger);
+            if (!isJobScheduled())
+            {
+                scheduleJob();
+            }
         }
 
         /// <summary>
@@ -111,6 +115,49 @@ namespace AE.Insomnia
                     _scheduler = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// schedule job
+        /// </summary>
+        private void scheduleJob()
+        {
+            Debug.WriteLine("InsomniaDaemon - scheduleJob");
+            String label = DateTime.Now.Ticks.ToString(); // required as this job is created inside other job
+            IJobDetail iJob = JobBuilder.Create<InsomniaApiRequest>().WithIdentity(JOB_PREFIX + label).Build();
+            ITrigger iTrigger = TriggerBuilder.Create()
+                .WithIdentity(TRIGGER_PREFIX + label)
+                .StartAt(DateTimeOffset.Now.AddMinutes(UPDATE_INTERVAL_IN_MINUTES))
+                .Build();
+            _scheduler.ScheduleJob(iJob, iTrigger);
+        }
+
+        /// <summary>
+        /// check is job already scheduled
+        /// </summary>
+        /// <returns></returns>
+        private bool isJobScheduled()
+        {
+            Debug.WriteLine("InsomniaDaemon - isJobScheduled");
+            int count = 0;
+            foreach (String group in _scheduler.GetJobGroupNames())
+            {
+                foreach (JobKey jk in _scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(group)))
+                {
+                    String jobName = jk.Name;
+                    Debug.WriteLine("InsomniaDaemon - isJobScheduled - job:{0}", jobName);
+                    if (jobName.Contains(JOB_PREFIX))
+                    {
+                        count++;
+                    }
+                }
+            }
+            Debug.WriteLine("InsomniaDaemon - isJobScheduled - count:{0}", count);
+            if (count > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -139,7 +186,7 @@ namespace AE.Insomnia
                     Debug.WriteLine("InsomniaApiRequest - Execute - ResponseError, StatusCode: {0}", res.StatusCode);
                 }
             }
-            catch (UriFormatException) 
+            catch (UriFormatException)
             {
                 // invalid api uri, can't recover from this.
                 Debug.WriteLine("InsomniaApiRequest - Execute - Fatal error, invalid api url");
