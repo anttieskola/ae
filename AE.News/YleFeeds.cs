@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -147,7 +148,7 @@ namespace AE.News
                         }
                     }
                     a.Tag.Add(feed.Tag);
-                    a.Hash = a.Content.GetHashCode();
+                    a.Hash = a.Title.GetHashCode();
                     news.Add(a);
                 }
             } catch (Exception e)

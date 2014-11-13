@@ -14,17 +14,17 @@ namespace AE.Insomnia
 {
     public class InsomniaDaemon
     {
+#if DEBUG
+        /* dev */
+        public const double UPDATE_INTERVAL_IN_MINUTES = 0.3;
+        public const String API_URI = "http://localhost:65431/api/MakeRequest";
+        public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
+#else
         /* azure */
         public const double UPDATE_INTERVAL_IN_MINUTES = 10;
         public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
         public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
-
-        /* dev */
-        //public const double UPDATE_INTERVAL_IN_MINUTES = 1;
-        //public const String API_URI = "http://localhost:65431/api/MakeRequest";
-        //public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
-
-
+#endif
         private IScheduler _scheduler;
 
         #region lazy singleton

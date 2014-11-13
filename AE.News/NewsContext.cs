@@ -75,16 +75,13 @@ namespace AE.News
         }
         #endregion
 
-        #region update job
+        #region maintenance job
         /// <summary>
         /// Maintain news DB
         /// </summary>
         /// <returns></returns>
         public async Task Maintenance()
         {
-            // clean old, TODO: fix this
-            //_db.RemoveAll(a => (a.Date.CompareTo(DateTime.Now.AddDays(maxArticleAgeInDays)) < 0));
-
             // fetch new
             foreach (var feed in _feeds)
             {
@@ -92,6 +89,7 @@ namespace AE.News
                 {
                     if (!_db.Any(a => a.Hash == article.Hash))
                     {
+                        Debug.WriteLine("NewsContext - Maintenance - New article, hash:{0}, title:{1}", article.Hash, article.Title);
                         // add to db
                         article.Id = _lastId;
                         _lastId++;
@@ -108,6 +106,22 @@ namespace AE.News
                     }
                 }
             }
+            // clean old
+            List<int> oldOnes = new List<int>();
+            foreach (var article in _db)
+            {
+                TimeSpan val = article.Date.Subtract(DateTime.Now);
+                int totalDaysOld = (int)(val.TotalDays * -1.0);
+                if (totalDaysOld > maxArticleAgeInDays)
+                {
+                    Debug.WriteLine("NewsContext - Maintenance - Removing article, hash:{0}, id:{1}, title:{2}, ageInDays:{3}", article.Hash, article.Id, article.Title, totalDaysOld);
+                    oldOnes.Add(article.Id);
+                }
+            }
+            if (oldOnes.Count > 0)
+            {
+                _db.RemoveAll(a => oldOnes.Contains(a.Id));
+            }
             Debug.WriteLine("NewsContext - Maintenance - Complete - ArticleCount: {0}", _db.Count());
         }
         #endregion
@@ -115,16 +129,25 @@ namespace AE.News
         #region repository api
         public IEnumerable<NewsArticle> Get(Func<NewsArticle, bool> filter = null)
         {
+            List<NewsArticle> articles;
             if (filter != null)
             {
-                return _db.Where(filter).ToList();
+                articles = _db.Where(filter).OrderByDescending(a => a.Date).ToList();
             }
-            return _db.ToList();
+            else
+            {
+                articles = _db.OrderByDescending(a => a.Date).ToList();
+            }
+            return articles;
         }
 
         public IEnumerable<NewsArticle> Get(string tag)
         {
-            return _db.Where(a => a.Tag.Contains(tag)).ToList();
+            var articles = from a in _db
+                           where a.Tag.Contains(tag)
+                           orderby a.Date descending
+                           select a;
+            return articles.ToList();
         }
 
         public NewsArticle Get(int id)

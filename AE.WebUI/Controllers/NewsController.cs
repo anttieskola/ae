@@ -36,11 +36,11 @@ namespace AE.WebUI.Controllers
                 // get default or first
                 if (nc.Tags().Any(t => t.Equals(defaultTag)))
                 {
-                    return PartialView("_News", nc.Get(a => a.Tag.Contains(defaultTag)));
+                    return PartialView("_News", nc.Get(defaultTag));
                 }
                 else
                 {
-                    return PartialView("_News", nc.Get(a => a.Tag.Contains(nc.Tags().First())));
+                    return PartialView("_News", nc.Get(nc.Tags().First()));
                 }
             }
             // all articles
@@ -49,7 +49,7 @@ namespace AE.WebUI.Controllers
                 return PartialView("_News", nc.Get());
             }
             // just given tag
-            return PartialView("_News", nc.Get(a => a.Tag.Contains(tag)));
+            return PartialView("_News", nc.Get(tag));
         }
 
         [HttpGet]
