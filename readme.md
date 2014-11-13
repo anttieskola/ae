@@ -5,11 +5,14 @@ ASP.NET MVC 5 Site.
 
 Web.config defines development database *"aetestdb"* you run locally. Define proper connection string for *"DbConnection"* during publishing or azure settings.
 
+## News
+News fetcher from YLE rss feeds. Provides repository for WebUI. News are saved in memory and repository contains maintenance method which should be called periodically to keep news up to date.
+
+## Insomnia
+Schedules a maintenance job which will use insomnia web service to get call back to WebUI web api function. That will call maintenance method in insomnia and new job will be scheduled. This keeps site awake always.
+
 ## Users
 ASP.NET Identity implemented here. Nothing new to see.
-
-## News
-News fetcher from YLE rss feeds. Currently fetches news every few minutes into memory "db" and provides them to UI. Will rework with this as it will lose data and scheduled update jobs when Appdomain shuts down. Should work if make other site "ping" deployed one.
 
 ## Mpg
 Miles per gallon placeholder. Have an implementation of one kind but not migrated here yet.
