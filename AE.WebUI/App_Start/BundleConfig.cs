@@ -26,8 +26,9 @@ namespace AE.WebUI
             var jsBundle = new Bundle("~/bundles/js");
             jsBundle.Orderer = new AsIsBundleOrdered();
             jsBundle
-                .Include("~/Scripts/jquery-2.1.1.js")
-                .Include("~/Scripts/bootstrap.js");
+                .Include("~/Scripts/jquery.js")
+                .Include("~/Scripts/bootstrap.js")
+                .Include("~/Scripts/highcharts.js");
             bundles.Add(jsBundle);
 
             // css

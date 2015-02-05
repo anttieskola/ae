@@ -64,16 +64,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IGenericRepository.cs" />
-    <Compile Include="Dal\FillRepository.cs" />
     <Compile Include="Dal\GenericRepository.cs" />
-    <Compile Include="Dal\VehicleRepository.cs" />
     <Compile Include="Dal\MpgContext.cs" />
     <Compile Include="Entity\Vehicle.cs" />
     <Compile Include="Entity\Fill.cs" />
     <Compile Include="Entity\Fuel.cs" />
-    <Compile Include="Migrations\201409241311542_initial.cs" />
-    <Compile Include="Migrations\201409241311542_initial.Designer.cs">
-      <DependentUpon>201409241311542_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201502051708046_initial.cs" />
+    <Compile Include="Migrations\201502051708046_initial.Designer.cs">
+      <DependentUpon>201502051708046_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,8 +87,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201409241311542_initial.resx">
-      <DependentUpon>201409241311542_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201502051708046_initial.resx">
+      <DependentUpon>201502051708046_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

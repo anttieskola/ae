@@ -1,4 +1,4 @@
-﻿@using AE.WebUI.Models
+﻿@using AE.WebUI.ViewModels
 @model NewsViewModel
 
 @{
@@ -48,7 +48,7 @@
                 <p>
                     This is a razor page in a ASP MVC application.
                     Separate class library implements RSS feed reader and daemon type of functionality which stores news into memory and updates them reguraly.
-                    It will keep news in memory until one month old. Server restart will wipe it also.
+                    It will keep news in memory until one month old or server sleeps/restarts.
                     When user selects a different category JQuery ajax call uses specific controller action to provide partial page with the news of selected category.
                 </p>
                 <p>

@@ -182,33 +182,33 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\site.css" />
     <Content Include="Content\spinner.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\anttieskola.com - Web Deploy.pubxml" />
-    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Images\GitHub_Logo.png" />
+    <Content Include="Images\mcsd.png" />
     <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\breakout.js" />
-    <Content Include="Scripts\jquery-2.1.1.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\highcharts.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\maze.js" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Scripts\npm.js" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -216,18 +216,27 @@
     <Content Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Me\Index.cshtml" />
-    <Content Include="Views\Doodles\Index.cshtml" />
-    <Content Include="Views\Doodles\Maze.cshtml" />
-    <Content Include="Views\Doodles\Breakout.cshtml" />
+    <Content Include="Views\JS\Index.cshtml" />
+    <Content Include="Views\JS\Maze.cshtml" />
+    <Content Include="Views\JS\Breakout.cshtml" />
     <Content Include="Views\Mpg\Index.cshtml" />
-    <Content Include="Views\Mpg\_Fills.cshtml" />
-    <Content Include="Views\MpgAdmin\Vehicles.cshtml" />
-    <Content Include="Views\MpgAdmin\Fills.cshtml" />
     <Content Include="Views\Blog\_Upload.cshtml" />
     <Content Include="Views\Blog\New.cshtml" />
     <Content Include="Views\News\ReadingView.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\_News.cshtml" />
+    <Content Include="Views\CSharp\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Lockout.cshtml" />
+    <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\MpgAdmin\Vehicles.cshtml" />
+    <Content Include="Views\MpgAdmin\VehicleCreate.cshtml" />
+    <Content Include="Views\MpgAdmin\VehicleEdit.cshtml" />
+    <Content Include="Views\MpgAdmin\VehicleDelete.cshtml" />
+    <Content Include="Views\MpgAdmin\FillCreate.cshtml" />
+    <Content Include="Views\MpgAdmin\Fills.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -247,28 +256,36 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="App_Start\UnityActivator.cs" />
+    <Compile Include="App_Start\UnityResolver.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\BlogController.cs" />
-    <Compile Include="Controllers\DoodlesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\InsomniaController.cs" />
-    <Compile Include="Controllers\MeController.cs" />
-    <Compile Include="Controllers\MpgAdminController.cs" />
-    <Compile Include="Controllers\MpgController.cs" />
-    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\View\AccountController.cs" />
+    <Compile Include="Controllers\View\BlogController.cs" />
+    <Compile Include="Controllers\View\CSharpController.cs" />
+    <Compile Include="Controllers\View\JSController.cs" />
+    <Compile Include="Controllers\View\HomeController.cs" />
+    <Compile Include="Controllers\Api\InsomniaController.cs" />
+    <Compile Include="Controllers\View\MeController.cs" />
+    <Compile Include="Controllers\View\MpgAdminController.cs" />
+    <Compile Include="Controllers\Api\MpgController.cs" />
+    <Compile Include="Controllers\View\MpgController.cs" />
+    <Compile Include="Controllers\View\NewsController.cs" />
     <Compile Include="Filters\MinificationStream.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BlogViewModels.cs" />
-    <Compile Include="Models\MpgViewModel.cs" />
-    <Compile Include="Models\NewsViewModels.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
+    <Compile Include="ViewModels\BlogViewModels.cs" />
+    <Compile Include="ViewModels\MpgAdminViewModels.cs" />
+    <Compile Include="ViewModels\MpgApiModels.cs" />
+    <Compile Include="ViewModels\MpgViewModel.cs" />
+    <Compile Include="ViewModels\NewsViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Filters\MinificationFilter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ApiControllers\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

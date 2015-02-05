@@ -69,7 +69,6 @@ namespace AE.Test
                     ManufacturingYear = 2015,
                     Engine = "DurHur",
                     Fuel = fuel,
-                    Private = true
                 };
             }
         }
@@ -85,7 +84,6 @@ namespace AE.Test
                     ManufacturingYear = 2014,
                     Engine = "HurDur",
                     Fuel = fuel,
-                    Private = false
                 };
             }
         }

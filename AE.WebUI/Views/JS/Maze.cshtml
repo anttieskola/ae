@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Maze";
+}
+
+<article style="margin-top: 20px;">
+    <div class="col-sm-12 col-lg-6">
+        <canvas id="mazeCanvas" width="320" height="240"></canvas>
+    </div>
+
+    <div class="col-sm-12 col-lg-6">
+        <a href="~/Scripts/maze.js">source code</a>
+    </div>
+</article>
+
+@section scripts {
+    <script src="~/Scripts/maze.js"></script>
+}

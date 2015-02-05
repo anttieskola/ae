@@ -1,61 +1,127 @@
 ﻿@using AE.Mpg.Entity
-@using AE.WebUI.Models
+@using AE.WebUI.ViewModels
 @model MpgViewModel
 
 @{
     ViewBag.Title = "Mpg";
 }
 
-<div class="col-lg-12" style="margin-top: 20px;">
-    <select id="carId" class="form-control">
-        @foreach (Car c in Model.Cars)
+<div class="col-sm-6" style="margin-top: 10px;">
+    <select id="vehicleId" class="form-control">
+        @foreach (Vehicle v in Model.Vehicles)
         {
-            if (c.CarId == Model.Selected)
+            if (v.VehicleId == Model.Selected)
             {
-                <option selected="selected" value="@c.CarId">@c.Make @c.Model</option>
+                <option selected="selected" value="@v.VehicleId">@v.Make @v.Model</option>
             }
             else
             {
-                <option value="@c.CarId">@c.Make @c.Model</option>
+                <option value="@v.VehicleId">@v.Make @v.Model</option>
             }
         }
     </select>
-
 </div>
 
-<div id="fills" class="col-lg12" style="margin-top: 20px;">
-    <div id="circularG" class="center-block">
-        <div id="circularG_1" class="circularG">
-        </div>
-        <div id="circularG_2" class="circularG">
-        </div>
-        <div id="circularG_3" class="circularG">
-        </div>
-        <div id="circularG_4" class="circularG">
-        </div>
-        <div id="circularG_5" class="circularG">
-        </div>
-        <div id="circularG_6" class="circularG">
-        </div>
-        <div id="circularG_7" class="circularG">
-        </div>
-        <div id="circularG_8" class="circularG">
-        </div>
+@if (Request.IsAuthenticated)
+{
+    <script>
+        function newFillUp()
+        {
+            var id = $('#vehicleId').val();
+            var action = '@Url.Action("FillCreate", "MpgAdmin")';
+            location.href = action + "?" + "id=" + id;
+        }
+    </script>
+
+    <div class="col-sm-3" style="margin-top: 10px;">
+        <button id="newFillUp" class="btn btn-default" onclick='newFillUp();'>New fill up</button>
     </div>
+
+    <div class="col-sm-3" style="margin-top: 10px;">
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Vehicles", "MpgAdmin")'">Managemement</button>
+    </div>
+}
+
+@* chart *@
+<div id="chart" class="col-lg-12" style="margin-top: 20px;">
 </div>
 
 @section scripts {
     <script>
-        // load fills
-        function loadFills()
-        {
-            var id = $('#carId').val();
-            $('#fills').load('@Url.Action("Fills")' + '/' + id);
+        function update() {
+            var id = $('#vehicleId').val();
+            updateChart(id);
         }
+
+        // chart
+        function updateChart(id) {
+            var chart = $('#chart').highcharts();
+            $.getJSON("/api/mpg/" + id,
+                function (response) {
+                    if (response.Success === true) {
+                        // create series
+                        var seriesName = response.Vehicle.Make + ", " + response.Vehicle.Model;
+                        var series = chart.addSeries({
+                            name: seriesName
+                        });
+                        // add data
+                        var mileage = 0;
+                        for (var i = 0; i < response.Fills.length; i++) {
+                            var data = response.Fills[i];
+                            if (mileage === 0) {
+                                mileage = data.Mileage;
+                            } else {
+                                var distance = data.Mileage - mileage;
+                                var consumption = data.Amount;
+                                var consumptionPer100 = consumption / distance * 100;
+                                var point = new Array();
+                                point.push(data.Mileage);
+                                point.push(consumptionPer100);
+                                series.addPoint(point, false);
+                            }
+                        }
+                        chart.redraw();
+                    }
+                });
+        }
+
         // doc rdy
         $(function () {
-            $('#carId').change(loadFills);
-            loadFills();
+            $('#chart').highcharts({
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    title: {
+                        text: 'Distance'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Consumption'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: "L / 100KM",
+                    valueDecimals: 1,
+                    crosshairs: true,
+                    followPointer: true,
+                    followTouchMove: true,
+                    shared: true
+                },
+                legend: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                }
+            });
+            // listen for selection change
+            $('#vehicleId').change(update);
+            update();
         });
     </script>
 }

@@ -1,13 +1,24 @@
 using AE.Mpg.Entity;
 using AE.Mpg.Dal;
-using System;
-using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Collections.Generic;
 
 namespace AE.Mpg.Migrations
 {
+    /// <summary>
+    /// helper to run code migrations from code
+    /// </summary>
+    public sealed class Run
+    {
+        public static void Migration()
+        {
+            var c = new Configuration();
+            var m = new DbMigrator(c);
+            m.Update();
+        }
+    }
+
     internal sealed class Configuration : DbMigrationsConfiguration<MpgContext>
     {
         public Configuration()
@@ -36,9 +47,8 @@ namespace AE.Mpg.Migrations
                 Make = "Ford",
                 ManufacturingYear = 2014,
                 Model = "Fiesta",
-                Engine = "100HP Ecoboost",
+                Engine = "1.0 3Cyl Ecoboost 100HP",
                 Fuel = petrol,
-                Private = false
             };
 
             if (db.Cars.Count() == 0)
@@ -54,28 +64,32 @@ namespace AE.Mpg.Migrations
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
                     Mileage = 1000,
-                    Amount = 40
+                    Amount = 40,
+                    Price = 55.04F
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
                     Mileage = 2000,
-                    Amount = 40
+                    Amount = 40,
+                    Price = null
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
                     Mileage = 4000,
-                    Amount = 40
+                    Amount = 40,
+                    Price = 53.03F
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
                     Mileage = 7000,
-                    Amount = 40
+                    Amount = 40,
+                    Price = 49.92F
                 }
             };
             if (db.Fills.Count() == 0)

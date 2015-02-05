@@ -1,4 +1,7 @@
-﻿(function () {
+﻿/// <reference path="_references.js" />
+// Antti.E 2014
+
+(function () {
     "use strict";
     var BO = {};
     BO = {

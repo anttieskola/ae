@@ -1,35 +1,53 @@
-﻿@using AE.Mpg.Entity
-@model IEnumerable<Vehicle>
+﻿@model IEnumerable<AE.Mpg.Entity.Vehicle>
 
 @{
     ViewBag.Title = "Vehicles";
 }
 
-<table class="table table-striped" style="margin-top: 25px;">
+<h2>Vehicles</h2>
+
+<p>
+    @Html.ActionLink("Create new vehicle", "VehicleCreate")
+</p>
+<table class="table">
     <tr>
-        <th>Make</th>
-        <th>Year</th>
-        <th>Model</th>
-        <th>Engine</th>
-        <th>Fuel</th>
-        <th>Private</th>
-        <th>User</th>
-        <th>Actions</th>
+        <th>
+            @Html.DisplayNameFor(model => model.Make)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ManufacturingYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Engine)
+        </th>
+        <th>
+            Management
+        </th>
     </tr>
-    @foreach (Vehicle v in Model)
+
+    @foreach (var item in Model)
     {
         <tr>
-            <th>@v.Make</th>
-            <th>@v.ManufacturingYear</th>
-            <th>@v.Model</th>
-            <th>@v.Engine</th>
-            <th>@v.Fuel.Name</th>
-            <th>@v.Private</th>
-            <th>@v.User</th>
-            <th>
-                <button class="btn btn-info btn-xs">Edit</button>
-                <button class="btn btn-danger btn-xs">Delete</button>
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Make)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManufacturingYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Engine)
+            </td>
+            <td>
+                @Html.ActionLink("Manage fill ups", "Fills", new { id = item.VehicleId }) |
+                @Html.ActionLink("Edit", "VehicleEdit", new { id = item.VehicleId }) |
+                @Html.ActionLink("Delete", "VehicleDelete", new { id = item.VehicleId })
+            </td>
         </tr>
     }
 </table>

@@ -1,16 +1,14 @@
 using System;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using AE.News.Abstract;
-using AE.News;
 using AE.Mpg.Abstract;
 using AE.Mpg.Dal;
 using AE.Mpg.Entity;
+using AE.WebUI.Controllers.View;
 
 namespace AE.WebUI.App_Start
 {
     /// <summary>
-    /// Specifies the Unity configuration for the main container.
+    /// Unity configuration
     /// </summary>
     public class UnityConfig
     {
@@ -37,13 +35,11 @@ namespace AE.WebUI.App_Start
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
-            // container.LoadConfiguration();
-
             // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IGenericRepository<Vehicle>, VehicleRepository>();
-            container.RegisterType<IGenericRepository<Fill>, FillRepository>();
+            container.RegisterType<AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
+            container.RegisterType<IGenericRepository<Vehicle>, GenericRepository<Vehicle>>();
+            container.RegisterType<IGenericRepository<Fill>, GenericRepository<Fill>>();
+            container.RegisterType<IGenericRepository<Fuel>, GenericRepository<Fuel>>();
         }
     }
 }

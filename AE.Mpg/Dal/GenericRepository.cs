@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AE.Mpg.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -9,20 +10,25 @@ using System.Threading.Tasks;
 namespace AE.Mpg.Dal
 {
     /// <summary>
+    /// Generic repository. Simple to use for one entity/table, but ofc use is limited.
     /// http://www.asp.net/mvc/tutorials/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application
+    /// http://stackoverflow.com/questions/6223075/how-do-i-define-a-generic-class-that-implements-an-interface-and-constrains-the
     /// </summary>
     /// <typeparam name="Temp"></typeparam>
-    internal class GenericRepository<Temp> where Temp : class
+    public class GenericRepository<Temp> : IGenericRepository<Temp> where Temp : class
     {
         internal MpgContext _db;
         internal DbSet<Temp> _set;
 
-        public GenericRepository(MpgContext db)
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public GenericRepository()
         {
-            _db = db;
+            _db = new MpgContext();
+            _db.Configuration.ProxyCreationEnabled = false; // Solve, proxy objects can't be serialized. Note! now changes to objects won't be updated in db...
             _set = _db.Set<Temp>();
         }
-
 
         /// <summary>
         /// queriable get
@@ -73,9 +79,11 @@ namespace AE.Mpg.Dal
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public virtual Temp Insert(Temp t)
+        public async virtual Task<Temp> Insert(Temp t)
         {
-            return _set.Add(t);
+            t = _set.Add(t);
+            await _db.SaveChangesAsync();
+            return t;
         }
 
         /// <summary>
@@ -83,10 +91,11 @@ namespace AE.Mpg.Dal
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public virtual Temp Update(Temp t)
+        public async virtual Task<Temp> Update(Temp t)
         {
             t = _set.Attach(t);
             _db.Entry(t).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return t;
         }
 
@@ -94,23 +103,25 @@ namespace AE.Mpg.Dal
         /// delete
         /// </summary>
         /// <param name="id"></param>
-        public virtual void Delete(int id)
+        public async virtual Task Delete(int id)
         {
             Temp t = _set.Find(id);
             _set.Remove(t);
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
         /// delete
         /// </summary>
         /// <param name="t"></param>
-        public virtual void Delete(Temp t)
+        public async virtual Task Delete(Temp t)
         {
             if (_db.Entry(t).State == EntityState.Detached)
             {
                 _set.Attach(t);
             }
             _set.Remove(t);
+            await _db.SaveChangesAsync();
         }
     }
 }

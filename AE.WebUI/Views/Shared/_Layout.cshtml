@@ -16,15 +16,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("AE", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @* uncomment when we got some content
+    @Html.ActionLink("AE", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                *@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("News", "Index", "News")</li>
                     <li>@Html.ActionLink("Me", "Index", "Me")</li>
                     <li>@Html.ActionLink("Mpg", "Index", "Mpg")</li>
-                    <li>@Html.ActionLink("Doodles", "Index", "Doodles")</li>
+                    <li>@Html.ActionLink("C#", "Index", "CSharp")</li>
+                    <li>@Html.ActionLink("JS", "Index", "JS")</li>
                 </ul>
+                @Html.Partial("_Login")
             </div>
         </div>
     </div>

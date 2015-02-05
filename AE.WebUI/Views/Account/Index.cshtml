@@ -1,0 +1,21 @@
+﻿@using AE.WebUI.ViewModels
+@model AccountViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<ul class="list-unstyled">
+    <li>
+        @Model.Message
+    </li>
+    <li>
+        @Model.Username
+    </li>
+    <li>
+        @Model.Email
+    </li>
+    <li>
+        @Html.ActionLink("Change password", "ChangePassword", "Account")
+    </li>
+</ul>

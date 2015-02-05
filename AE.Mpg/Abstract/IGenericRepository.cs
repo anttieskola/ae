@@ -33,25 +33,25 @@ namespace AE.Mpg.Abstract
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        Temp Insert(Temp v);
+        Task<Temp> Insert(Temp v);
 
         /// <summary>
         /// update item
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        Temp Update(Temp v);
+        Task<Temp> Update(Temp v);
 
         /// <summary>
         /// delete item
         /// </summary>
         /// <param name="id"></param>
-        void Delete(int id);
+        Task Delete(int id);
 
         /// <summary>
         /// delete item
         /// </summary>
         /// <param name="v"></param>
-        void Delete(Temp v);
+        Task Delete(Temp v);
     }
 }

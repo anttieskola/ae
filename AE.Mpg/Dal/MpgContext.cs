@@ -17,19 +17,14 @@ namespace AE.Mpg.Dal
         {
         }
 
-        static MpgContext()
-        {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MpgContext, Migrations.Configuration>());
-        }
-
         protected override void OnModelCreating(DbModelBuilder mb)
         {
             mb.HasDefaultSchema("mpg");
-            mb.Entity<AspNetUser>().HasKey<string>(i => i.Id); // tell about user id key
-            mb.Entity<AspNetUser>().ToTable("AspNetUsers", "dbo"); // set the table name to correspond real name (made by AE.User)
-            mb.Ignore<IdentityUserLogin>(); // ignore, to prevent creation
-            mb.Ignore<IdentityUserRole>(); // ignore, to prevent creation
-            mb.Ignore<IdentityUserClaim>(); // ignore, to prevent creation
+            //mb.Entity<AspNetUser>().HasKey<string>(i => i.Id); // tell about user id key
+            //mb.Entity<AspNetUser>().ToTable("AspNetUsers", "dbo"); // set the table name to correspond real name (made by AE.User)
+            //mb.Ignore<IdentityUserLogin>(); // ignore, to prevent creation
+            //mb.Ignore<IdentityUserRole>(); // ignore, to prevent creation
+            //mb.Ignore<IdentityUserClaim>(); // ignore, to prevent creation
             // still i commented out the AspNetUsers table from initial script as AE.Users generates it.
             // did not find out better solution to this.
 

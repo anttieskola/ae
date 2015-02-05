@@ -1,5 +1,5 @@
 ﻿/// <reference path="_references.js" />
-// Copyright Antti.E 2014
+// Antti.E 2014
 
 /**
  * direction helper
