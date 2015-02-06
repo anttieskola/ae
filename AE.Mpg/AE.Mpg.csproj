@@ -73,6 +73,10 @@
     <Compile Include="Migrations\201502051708046_initial.Designer.cs">
       <DependentUpon>201502051708046_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502061336017_addedUnitOfDistanceAndFillDate.cs" />
+    <Compile Include="Migrations\201502061336017_addedUnitOfDistanceAndFillDate.Designer.cs">
+      <DependentUpon>201502061336017_addedUnitOfDistanceAndFillDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -89,6 +93,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502051708046_initial.resx">
       <DependentUpon>201502051708046_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502061336017_addedUnitOfDistanceAndFillDate.resx">
+      <DependentUpon>201502061336017_addedUnitOfDistanceAndFillDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

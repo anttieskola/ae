@@ -72,6 +72,7 @@
                                 mileage = data.Mileage;
                             } else {
                                 var distance = data.Mileage - mileage;
+                                mileage = data.Mileage;
                                 var consumption = data.Amount;
                                 var consumptionPer100 = consumption / distance * 100;
                                 var point = new Array();
@@ -96,7 +97,7 @@
                 },
                 xAxis: {
                     title: {
-                        text: 'Distance'
+                        text: 'Mileage'
                     }
                 },
                 yAxis: {

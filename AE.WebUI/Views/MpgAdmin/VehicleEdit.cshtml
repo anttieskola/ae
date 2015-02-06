@@ -1,4 +1,5 @@
-﻿@using AE.WebUI.ViewModels
+﻿@using AE.Mpg.Entity
+@using AE.WebUI.ViewModels
 @model VehicleEditViewModel
 
 @{
@@ -46,6 +47,13 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Vehicle.Engine, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Vehicle.Engine, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vehicle.UnitOfDistance, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Vehicle.UnitOfDistance", EnumHelper.GetSelectList(typeof(UnitOfDistance)))
             </div>
         </div>
 

@@ -3,6 +3,7 @@ using AE.Mpg.Dal;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace AE.Mpg.Migrations
 {
@@ -29,8 +30,8 @@ namespace AE.Mpg.Migrations
         protected override void Seed(MpgContext db)
         {
             // fuel types
-            Fuel petrol = new Fuel { Name = "Petrol" };
-            if (db.Fuels.Count() == 0)
+            var petrol = new Fuel { Name = "Petrol" };
+            if (!db.Fuels.Any(f => f.Name == "Petrol"))
             {
                 db.Fuels.AddRange(new List<Fuel>
                     {
@@ -40,63 +41,113 @@ namespace AE.Mpg.Migrations
                         new Fuel { Name = "Electricity"}
                     });
             }
+            else
+            {
+                petrol = db.Fuels.First(f => f.Name == "Petrol");
+            }
 
             // my car
-            Vehicle myCar = new Vehicle
+            var myCar = new Vehicle
             {
                 Make = "Ford",
                 ManufacturingYear = 2014,
                 Model = "Fiesta",
-                Engine = "1.0 3Cyl Ecoboost 100HP",
+                Engine = "1.0 Ecoboost 100HP",
                 Fuel = petrol,
+                UnitOfDistance = UnitOfDistance.Kilometers
             };
 
-            if (db.Cars.Count() == 0)
+            if (!db.Cars.Any(c => c.Make == "Ford" && c.Model == "Fiesta" && c.Engine == "1.0 Ecoboost 100HP"))
             {
                 db.Cars.Add(myCar);
             }
+            else
+            {
+                myCar = db.Cars.First(c => c.Make == "Ford" && c.Model == "Fiesta" && c.Engine == "1.0 Ecoboost 100HP");
+            }
 
-            // my fills
+            // my first ten fill ups
             List<Fill> fills = new List<Fill>
             {
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
-                    Mileage = 1000,
-                    Amount = 40,
-                    Price = 55.04F
+                    Mileage = 29,
+                    Amount = 0,
+                    Date = new DateTime(2014, 8, 1),
+                    Price = 0F
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
-                    Mileage = 2000,
-                    Amount = 40,
-                    Price = null
+                    Mileage = 515,
+                    Amount = 29.3F,
+                    Date = new DateTime(2014, 8, 8),
+                    Price = 48.02F
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
-                    Mileage = 4000,
-                    Amount = 40,
-                    Price = 53.03F
+                    Mileage = 870,
+                    Amount = 21.5F,
+                    Date = new DateTime(2014, 8, 15),
+                    Price = 35.23F
                 },
                 new Fill
                 {
                     Vehicle = myCar,
                     VehicleId = myCar.VehicleId,
-                    Mileage = 7000,
-                    Amount = 40,
-                    Price = 49.92F
+                    Mileage = 1398,
+                    Amount = 28.74F,
+                    Date = new DateTime(2014, 8, 31),
+                    Price = 44.69F
+                },
+                new Fill
+                {
+                    Vehicle = myCar,
+                    VehicleId = myCar.VehicleId,
+                    Mileage = 1987,
+                    Amount = 33.09F,
+                    Date = new DateTime(2014, 9, 15),
+                    Price = 52.08F
+                },
+                new Fill
+                {
+                    Vehicle = myCar,
+                    VehicleId = myCar.VehicleId,
+                    Mileage = 2629,
+                    Amount = 37.30F,
+                    Date = new DateTime(2014, 9, 29),
+                    Price = 57.22F
+                },
+                new Fill
+                {
+                    Vehicle = myCar,
+                    VehicleId = myCar.VehicleId,
+                    Mileage = 2899,
+                    Amount = 15.99F,
+                    Date = new DateTime(2014, 10, 10),
+                    Price = 26.04F
+                },
+                new Fill
+                {
+                    Vehicle = myCar,
+                    VehicleId = myCar.VehicleId,
+                    Mileage = 3222,
+                    Amount = 19.43F,
+                    Date = new DateTime(2014, 11, 30),
+                    Price = 27.10F
                 }
             };
-            if (db.Fills.Count() == 0)
+            if (!db.Fills.Any(f => f.VehicleId == myCar.VehicleId))
             {
                 db.Fills.AddRange(fills);
             }
 
+            // save
             db.SaveChanges();
         }
     }

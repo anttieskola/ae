@@ -23,6 +23,9 @@
                 Price
             </th>
             <th>
+                Date
+            </th>
+            <th>
                 Save
             </th>
             <th>
@@ -43,6 +46,9 @@
                     </td>
                     <td>
                         @Html.EditorFor(f => fill.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(f => fill.Date, new { htmlAttributes = new { @class = "form-control" } })
                     </td>
                     <td>
                         <div class="form-actions form-inline no-color">
