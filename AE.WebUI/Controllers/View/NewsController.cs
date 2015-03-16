@@ -22,7 +22,7 @@ namespace AE.WebUI.Controllers.View
             NewsViewModel vm = new NewsViewModel
             {
                 Tags = new List<string>(nc.Tags()),
-                Tag = nc.Tags().First()
+                Tag = nc.Tags().FirstOrDefault()
             };
             return View(vm);
         }
