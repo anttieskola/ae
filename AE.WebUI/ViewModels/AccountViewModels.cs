@@ -44,4 +44,34 @@ namespace AE.WebUI.ViewModels
         [Display(Name = "New password again")]
         public string NewPasswordConfirmation { get; set; }
     }
+
+    public class ForgotPasswordViewModel
+    {
+        public string Message { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        public string Token { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "New password")]
+        public string NewPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "New password again")]
+        public string NewPasswordConfirmation { get; set; }
+    }
 }

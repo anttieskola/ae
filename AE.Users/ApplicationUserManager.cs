@@ -5,9 +5,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using SendGrid;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,10 +95,23 @@ namespace AE.Users
 
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage msg)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            // We use SendGrid to send emails. Note the username and password must be found in application settings.
+            SendGridMessage mail = new SendGridMessage();
+            mail.AddTo(msg.Destination);
+            mail.From = new System.Net.Mail.MailAddress("noreply@anttieskola.com", "Skynet");
+            mail.Subject = msg.Subject;
+            mail.Text = msg.Body;
+            mail.Html = msg.Body;
+            var credentials = new NetworkCredential(
+                 ConfigurationManager.AppSettings["SendGridUsername"],
+                 ConfigurationManager.AppSettings["SendGridPassword"]);
+            var transportWeb = new Web(credentials);
+            if (transportWeb != null)
+            {
+                await transportWeb.DeliverAsync(mail);
+            }
         }
     }
 

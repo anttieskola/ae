@@ -1,7 +1,124 @@
-﻿
+﻿@model IEnumerable<AE.WebUI.ViewModels.CSharpSnippletListItem>
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "C#";
 }
 
-<h3>Nothing here yet.</h3>
+@* list *@
+<div class="col-md-3" style="border: 1px;">
+    <div class="list-group">
+        @if (Request.IsAuthenticated)
+        {
+            <div class="list-group-item" onclick="window.location.href='@Url.Action("Create")'" style="cursor: pointer;">
+                <h5>Create new</h5>
+            </div>
+        }
 
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item snippletSelector" onclick="loadSnipplet(@item.Id, this);" style="cursor: pointer;">
+                <h5>@item.Headline</h5>
+            </div>
+        }
+    </div>
+</div>
+
+@* snipplet *@
+<div class="col-md-9">
+    @* code *@
+    <div id="divSnipplet" class="hidden">
+        @if (Request.IsAuthenticated)
+            {
+            <script>
+                function Edit() {
+                    if (currentSnippletId !== null) {
+                        window.location.href = '@Url.Action("Edit")/' + currentSnippletId;
+                    }
+                }
+                function Delete() {
+                    if (currentSnippletId !== null) {
+                        window.location.href = '@Url.Action("Delete")/' + currentSnippletId;
+                    }
+                }
+            </script>
+            <div class="col-xs-6" style="text-align: left">
+                <button class="btn btn-warning" onclick="Delete();">Delete</button>
+                <button class="btn btn-info" onclick="Edit();">Edit</button>
+            </div>
+            <div class="col-xs-6" style="text-align: right;">
+                <button class="btn btn-default" onclick="selectCode();">Select code</button>
+            </div>
+        }
+        else
+        {
+            <div class="col-xs-12" style="text-align: right;">
+                <button class="btn btn-default" onclick="selectCode();">Select code</button>
+            </div>
+        }
+        <div class="col-xs-12">
+            <pre style="border: 0px; padding:0px; background-color: transparent;">
+            <code id="content"></code>
+            </pre>
+        </div>
+    </div>
+    @* welcome *@
+    <div id="divWelcome">
+        <h4>My C# snipplets</h4>
+        <p>Please browse around, start by selecting one from the list.</p>
+        <p>Syntax made pretty with <a href="https://highlightjs.org/" target="_blank">highlight.js</a> and it's Zenburn theme.</p>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // selected snipplets id
+        var currentSnippletId = null;
+
+        // select
+        function selectCode() {
+            var code = document.getElementById('content');
+            var range, selection;
+            if (document.body.createTextRange) {
+                range = document.body.createTextRange();
+                range.moveToElementText(code);
+                range.select();
+            } else if (window.getSelection) {
+                selection = window.getSelection();
+                range = document.createRange();
+                range.selectNodeContents(code);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+
+        // load snipplet
+        function loadSnipplet(id, snippletSelected) {
+            // set id for edit and delete functions
+            currentSnippletId = id;
+            // set clicked div active
+            $('.snippletSelector').removeClass('active');
+            $(snippletSelected).addClass('active');
+            // hide welcome screen
+            if ($('#divSnipplet').hasClass('hidden')) {
+                $('#divSnipplet').removeClass('hidden');
+                $('#divWelcome').addClass('hidden');
+            }
+            // load
+            $.getJSON("/api/csharp/" + id, function (response) {
+                // data
+                var headline = response.Headline;
+                var content = response.Content;
+                // set content
+                $('#headline').text(headline);
+                $('#content').text(content);
+                // highlight
+                $('#content').each(function (i, b) { hljs.highlightBlock(b); });
+            });
+        }
+
+        // doc rdy
+        $(function () {
+            // noop
+        });
+    </script>
+}

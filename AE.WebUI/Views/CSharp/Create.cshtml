@@ -1,0 +1,39 @@
+﻿@model AE.Snipplets.Entity.Snipplet
+
+@{
+    ViewBag.Title = "Create new C# snipplet";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Headline, htmlAttributes: new { @class = "control-label col-md-12", style = "text-align: left;" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Headline, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 800px;" } })
+                @Html.ValidationMessageFor(model => model.Headline, "", new { htmlAttributes = new { @class = "form-control", style = "max-width: 800px;" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-12", style = "text-align: left;" })
+            <div class="col-md-12">
+                @Html.TextAreaFor(model => model.Content, 40, 80, new { htmlAttributes = new { @class = "form-control" }, style = "width: 800px; max-width: 800px; resize: none;", maxLength = 4000, wrap = "hard" })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

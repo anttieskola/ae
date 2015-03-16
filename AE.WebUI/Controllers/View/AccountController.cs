@@ -5,14 +5,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace AE.WebUI.Controllers.View
 {
+    /// <summary>
+    /// This controller handles login, logout and all account management
+    /// </summary>
     [Authorize]
     public class AccountController : Controller
     {
@@ -50,33 +51,7 @@ namespace AE.WebUI.Controllers.View
         #endregion
 
         /// <summary>
-        /// redirect helper
-        /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public ActionResult Index(string message = "")
-        {
-            AspNetUser user = UserManager.FindById(User.Identity.GetUserId());
-            return View(new AccountViewModel
-            {
-                Message = message,
-                Username = user.UserName,
-                Email = user.Email
-            });
-        }
-
-        /// <summary>
-        /// login - get
+        /// Login - get
         /// </summary>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
@@ -88,7 +63,7 @@ namespace AE.WebUI.Controllers.View
         }
 
         /// <summary>
-        /// login - post
+        /// Login - post
         /// </summary>
         /// <param name="model"></param>
         /// <param name="returnUrl"></param>
@@ -107,18 +82,23 @@ namespace AE.WebUI.Controllers.View
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (returnUrl != null)
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Details");
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    // Todo: We missing view when account is locked, as we don't use the feature atm.
+                    return View("Logout");
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Invalid login attempt");
                     return View(model);
             }
         }
 
         /// <summary>
-        /// logout - post
+        /// Logout - post
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -130,17 +110,34 @@ namespace AE.WebUI.Controllers.View
         }
 
         /// <summary>
-        /// ChangePassword - get
+        /// Details view - get, there is no post
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Details(string message = "")
+        {
+            AspNetUser user = UserManager.FindById(User.Identity.GetUserId());
+            return View(new AccountViewModel
+            {
+                Message = message,
+                Username = user.UserName,
+                Email = user.Email
+            });
+        }
+
+        /// <summary>
+        /// Change password - get view§
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public ActionResult ChangePassword()
         {
-            return View();
+            return View(new ChangePasswordViewModel());
         }
 
         /// <summary>
-        /// ChangePassword - post
+        /// Change password - post
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -149,13 +146,13 @@ namespace AE.WebUI.Controllers.View
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid data.");
+                ModelState.AddModelError("", "Invalid data");
                 return View(model);
             }
 
             if (model.NewPassword != model.NewPasswordConfirmation)
             {
-                ModelState.AddModelError("", "Password's do not match.");
+                ModelState.AddModelError("", "Password's do not match");
                 return View(model);
             }
 
@@ -166,10 +163,10 @@ namespace AE.WebUI.Controllers.View
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    ModelState.AddModelError("", "Verification missing.");
+                    ModelState.AddModelError("", "Verification missing");
                     return View(model);
                 case SignInStatus.Failure:
-                    ModelState.AddModelError("", "Invalid password.");
+                    ModelState.AddModelError("", "Invalid password");
                     return View(model);
                 case SignInStatus.Success:
                     // request token for password change from manager
@@ -178,11 +175,125 @@ namespace AE.WebUI.Controllers.View
                     var res = await UserManager.ResetPasswordAsync(User.Identity.GetUserId(), token, model.NewPassword);
                     if (res.Succeeded)
                     {
-                        return RedirectToAction("Index", new { message = "Success." });
+                        return RedirectToAction("Details", new { message = "Success" });
                     }
                     break;
             }
-            return RedirectToAction("Index", new { message = "Failure." });
+            return RedirectToAction("Message", new { message = "Failure" });
+        }
+
+        /// <summary>
+        /// Forgot password - get view
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ForgotPassword(string message = null)
+        {
+            return View(new ForgotPasswordViewModel { Message = message });
+        }
+
+        /// <summary>
+        /// Forgot password - post form submit
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            // check model
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Message", new { message = "Failure" });
+            }
+            // check user exist
+            AspNetUser user = await UserManager.FindByNameAsync(model.Username);
+            if (user == null)
+            {
+                return RedirectToAction("Message", new { message = "Failure" });
+            }
+            // create token, link and msg
+            string token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            string link = Url.Action("ResetPassword", "Account", new { UserId = user.Id, token = token }, protocol: Request.Url.Scheme);
+            string msg = String.Format("Please reset your password from clicking the following <a href=\"{0}\">link</a>", link);
+            // send email
+            await UserManager.SendEmailAsync(user.Id, "Password reset", msg);
+            // success
+            return RedirectToAction("Message", new { message = "Email send" });
+        }
+
+        /// <summary>
+        /// Reset password - get thru link (email) view
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(string userId, string token)
+        {
+            // check id and token are set
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("Message", new { message = "Failure" });
+            }
+            // check user exist
+            AspNetUser user = await UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Message", new { message = "Failure" });
+            }
+            // view to reset
+            return View(new ResetPasswordViewModel { UserId = userId, Token = token});
+
+        }
+
+        /// <summary>
+        /// Reset password - post from view
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            // check model
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid data");
+                return View(model);
+            }
+
+            // check that passwords match
+            if (model.NewPassword != model.NewPasswordConfirmation)
+            {
+                ModelState.AddModelError("", "Password's do not match");
+                return View(model);
+            }
+
+            // reset password
+            var res = await UserManager.ResetPasswordAsync(model.UserId, model.Token, model.NewPassword);
+            if (!res.Succeeded)
+            {
+                return RedirectToAction("Message", new { message = "Failure" });
+            }
+            return RedirectToAction("Message", new { message = "Success" });
+        }
+
+        /// <summary>
+        /// Message - get helper view just to display message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult Message(string message)
+        {
+            ViewBag.Message = message;
+            return View();
         }
     }
 }

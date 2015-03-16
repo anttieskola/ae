@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.WebUI", "AE.WebUI\AE.WebUI.csproj", "{F7E5502E-114B-4ECF-AD52-5E6E7AD621C6}"
 EndProject
@@ -25,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Users", "AE.Users\AE.Users.csproj", "{EC97634A-8F7F-4F7B-ABE9-F22644311B72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Insomnia", "AE.Insomnia\AE.Insomnia.csproj", "{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.Snipplets", "AE.Snipplets\AE.Snipplets.csproj", "{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AE.EF", "AE.EF\AE.EF.csproj", "{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +103,26 @@ Global
 		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|ARM.ActiveCfg = Release|Any CPU
 		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|x64.ActiveCfg = Release|Any CPU
 		{26DE420C-D3E7-4B68-A9E4-04BCDB0AFB49}.Release|x86.ActiveCfg = Release|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C46D542-FBED-4488-9A5F-0AFEDEBE26C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Release|x64.ActiveCfg = Release|Any CPU
+		{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

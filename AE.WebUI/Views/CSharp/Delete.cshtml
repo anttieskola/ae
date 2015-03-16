@@ -1,0 +1,30 @@
+﻿@model AE.Snipplets.Entity.Snipplet
+
+@{
+    ViewBag.Title = "Delete C# snipplet";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+
+<div>
+    <div class="col-md-12">
+        @Html.DisplayFor(model => model.Headline)
+    </div>
+
+    <div class="col-md-12">
+        <pre style="border: 0px; padding:0px;">
+        <code id="content">
+@Model.Content
+        </code>
+        </pre>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

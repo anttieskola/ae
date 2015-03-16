@@ -28,7 +28,8 @@ namespace AE.WebUI
             jsBundle
                 .Include("~/Scripts/jquery.js")
                 .Include("~/Scripts/bootstrap.js")
-                .Include("~/Scripts/highcharts.js");
+                .Include("~/Scripts/highcharts.js")
+                .Include("~/Scripts/highlight.js");
             bundles.Add(jsBundle);
 
             // css
@@ -38,6 +39,7 @@ namespace AE.WebUI
                 .Include("~/Content/bootstrap.css")
                 .Include("~/Content/bootstrap-theme.css")
                 .Include("~/Content/spinner.css")
+                .Include("~/Content/highlight.css")
                 .Include("~/Content/site.css");
             bundles.Add(cssBundle);
 

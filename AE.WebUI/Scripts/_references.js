@@ -4,3 +4,4 @@
 /// <reference path="bootstrap.js" />
 /// <reference path="jquery.js" />
 /// <reference path="highcharts.js" />
+/// <reference path="highlight.js" />

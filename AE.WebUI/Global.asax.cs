@@ -15,6 +15,7 @@ namespace AE.WebUI
         {
             AE.Users.Migrations.Run.Migration();
             AE.Mpg.Migrations.Run.Migration();
+            AE.Snipplets.Migrations.Run.Migration();
         }
 
         /// <summary>

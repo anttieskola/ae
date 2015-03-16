@@ -13,6 +13,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Login", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink("Login", "Login", "Account", new { returnUrl = Request.Url.ToString() }, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
