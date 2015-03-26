@@ -206,6 +206,7 @@
     <None Include="Properties\PublishProfiles\anttieskola.com - Web Deploy.pubxml" />
     <Content Include="Images\GitHub_Logo.png" />
     <Content Include="Images\mcsd.png" />
+    <Content Include="Images\trouble-afoot.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\breakout.js" />
     <Content Include="Scripts\highcharts.js" />
@@ -246,6 +247,7 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\Message.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Funny\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -272,6 +274,7 @@
     <Compile Include="Controllers\View\AccountController.cs" />
     <Compile Include="Controllers\View\BlogController.cs" />
     <Compile Include="Controllers\View\CSharpController.cs" />
+    <Compile Include="Controllers\View\FunnyController.cs" />
     <Compile Include="Controllers\View\JSController.cs" />
     <Compile Include="Controllers\View\HomeController.cs" />
     <Compile Include="Controllers\Api\InsomniaController.cs" />

@@ -35,6 +35,7 @@ namespace AE.WebUI.Controllers.View
         {
             var model = from s in _repo.Query<Snipplet>()
                         where s.Tags.Any(t => t.TagId == CsTagId)
+                        orderby s.Headline
                         select new CSharpSnippletListItem { Id = s.SnippletId, Headline = s.Headline };
             return View(model);
         }
@@ -77,11 +78,11 @@ namespace AE.WebUI.Controllers.View
             return new HttpStatusCodeResult(HttpStatusCode.NotFound);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Snipplet snipplet)
         {
-            if (ModelState.IsValid)
+            if (snipplet.Headline != null && snipplet.Content != null)
             {
                 _repo.Update(snipplet);
                 await _repo.CommitAsync();
