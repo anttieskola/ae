@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,9 +20,9 @@ namespace AE.Reddit.Utils
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static async Task<List<RedditPost>> ParsePosts(string url)
+        public static async Task<RedditPostPage> ParsePosts(string url)
         {
-            List<RedditPost> lp = new List<RedditPost>();
+            RedditPostPage rpp = new RedditPostPage();
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.Accept = "application/json";
@@ -39,14 +40,24 @@ namespace AE.Reddit.Utils
                         using (JsonTextReader jtr = new JsonTextReader(sr))
                         {
                             // load json
-                            JObject all = JObject.Load(jtr);
-                            // post array
-                            JArray posts = (JArray)all["data"]["children"];
-                            // parse posts, Todo: could we somehow avoid loop?
-                            foreach (JToken post in posts)
+                            try
                             {
-                                RedditPost p = post["data"].ToObject<RedditPost>();
-                                lp.Add(p);
+                                JObject all = JObject.Load(jtr);
+                                rpp.Before = all["data"]["before"].ToObject<string>(); // token to previous page
+                                rpp.After = all["data"]["after"].ToObject<string>(); // token to next page
+                                                                                     // post array
+                                JArray posts = (JArray)all["data"]["children"];
+                                // parse posts, Todo: could we somehow avoid loop?
+                                foreach (JToken post in posts)
+                                {
+                                    RedditPost p = post["data"].ToObject<RedditPost>();
+                                    rpp.Posts.Add(p);
+                                }
+                            }
+                            catch (JsonReaderException jre)
+                            {
+                                Debug.WriteLine(jre.Message);
+                                throw new WebException("ParsePosts, invalid data in response from " + url);
                             }
                         }
                     }
@@ -57,7 +68,15 @@ namespace AE.Reddit.Utils
                 // Todo: could remove try as we don't handle exception...
                 throw;
             }
-            return lp;
+            return rpp;
+        }
+
+        // Todo
+        public static async Task<List<string>> ParseComments(string urlOrId, int maxAmount)
+        {
+            List<string> comments = new List<string>();
+            comments.Add("first.");
+            return comments;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace AE.Test
         public void ParsePosts()
         {
             RedditScraper fs = new RedditScraper();
-            List<RedditPost> l = RedditScraper.ParsePosts("http://www.reddit.com/r/csharp.json").Result;
-            Assert.IsFalse(l.Count == 0);
+            RedditPostPage rpp = RedditScraper.ParsePosts("http://www.reddit.com/r/csharp.json").Result;
+            Assert.IsFalse(rpp.Posts.Count == 0);
         }
 
         [TestMethod]
@@ -22,7 +22,7 @@ namespace AE.Test
         public void ParsePostsInvalidUri()
         {
             RedditScraper fs = new RedditScraper();
-            List<RedditPost> l = RedditScraper.ParsePosts("http://127.0.0.1.json").Result;
+            RedditPostPage rpp = RedditScraper.ParsePosts("http://127.0.0.1.json").Result;
         }
     }
 }

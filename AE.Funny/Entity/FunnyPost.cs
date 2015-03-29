@@ -10,12 +10,12 @@ namespace AE.Funny.Entity
     {
         public FunnyPost()
         {
-            Comments = new HashSet<string>();
+            Comments = new List<string>();
         }
         public int FunnyPostId { get; set; }
         public string RedditId { get; set; }
         public string Title { get; set; }
         public String ImageUrl { get; set; }
-        public HashSet<string> Comments { get; set; }
+        public List<string> Comments { get; set; }
     }
 }

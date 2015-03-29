@@ -8,9 +8,21 @@ namespace AE.Test
     public class Imgur_ImgurScraper
     {
         [TestMethod]
-        public void GetImageUrl()
+        public void GetImageUrlFromId()
         {
-            ImgurScraper.GetImageUrl("CXdOCxi").Wait();
+            Assert.IsNotNull(ImgurScraper.GetImageUrl("CXdOCxi").Result);
+        }
+
+        [TestMethod]
+        public void GetImageUrlFromUrl()
+        {
+            Assert.IsNotNull(ImgurScraper.GetImageUrl("http://imgur.com/BSMhjEp").Result);
+        }
+
+        [TestMethod]
+        public void GetImageUrlFromUrl2()
+        {
+            Assert.IsNotNull(ImgurScraper.GetImageUrl("http://imgur.com/DwWgZeH").Result);
         }
     }
 }

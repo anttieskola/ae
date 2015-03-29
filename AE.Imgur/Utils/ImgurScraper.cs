@@ -16,12 +16,21 @@ namespace AE.Imgur.Utils
         /// 
         /// Throws WebException in case of error
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="urlOrId">Full url to imgur or just image id</param>
         /// <returns>image link or null</returns>
-        public static async Task<string> GetImageUrl(string id)
+        public static async Task<string> GetImageUrl(string urlOrId)
         {
-            string url = "http://imgur.com/";
-            url += id;
+            string url = "";
+            if (urlOrId.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) ||
+                urlOrId.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+            {
+                url = urlOrId;
+            }
+            else
+            {
+                url += "http://imgur.com/";
+                url += urlOrId;
+            }
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.Timeout = 3000;
@@ -42,6 +51,20 @@ namespace AE.Imgur.Utils
                             {
                                 // start and end indexes
                                 int start = content.IndexOf("href=", image_src) + 6;
+                                int end = content.IndexOf("\"", start);
+                                // small sanity check
+                                if (end - start > 0 && end - start < 40)
+                                {
+                                    string image_url = content.Substring(start, end - start);
+                                    return image_url;
+                                }
+                            }
+                            // <meta property="og:image" content="url" />
+                            int og_image = content.IndexOf("property=\"og:image\"");
+                            if (og_image != -1)
+                            {
+                                // start and end indexes
+                                int start = content.IndexOf("content=", og_image) + 9;
                                 int end = content.IndexOf("\"", start);
                                 // small sanity check
                                 if (end - start > 0 && end - start < 40)
