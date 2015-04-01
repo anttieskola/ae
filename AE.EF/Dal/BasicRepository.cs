@@ -38,6 +38,11 @@ namespace AE.EF.Dal
             _db.Entry(t).State = EntityState.Deleted;
         }
 
+        public virtual void Delete<SetType>(int id) where SetType : class
+        {
+            SetType st = _db.Set<SetType>().Find(id);
+            _db.Entry(st).State = EntityState.Deleted;
+        }
         #endregion
 
         #region Commit / Save after basic functions

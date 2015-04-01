@@ -12,6 +12,7 @@ namespace AE.EF.Abstract
         void Insert<EntityType>(EntityType e) where EntityType : class;
         void Update<EntityType>(EntityType e) where EntityType : class;
         void Delete<EntityType>(EntityType e) where EntityType : class;
+        void Delete<EntityType>(int id) where EntityType : class;
         void Commit();
         Task CommitAsync();
         EntityType Find<EntityType>(int id) where EntityType : class;
