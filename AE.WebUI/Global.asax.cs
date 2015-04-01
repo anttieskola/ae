@@ -13,9 +13,10 @@ namespace AE.WebUI
     {
         private void runMigrations()
         {
-            AE.Users.Migrations.Run.Migration();
-            AE.Mpg.Migrations.Run.Migration();
-            AE.Snipplets.Migrations.Run.Migration();
+            Users.Migrations.Run.Migration();
+            Mpg.Migrations.Run.Migration();
+            Snipplets.Migrations.Run.Migration();
+            Funny.Migrations.Run.Migration();
         }
 
         /// <summary>

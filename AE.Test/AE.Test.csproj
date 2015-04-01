@@ -100,6 +100,10 @@
     <Compile Include="Imgur_ImgurScraper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AE.EF\AE.EF.csproj">
+      <Project>{C71BE6D2-A76D-4A59-B75C-A8F52FDEFAC1}</Project>
+      <Name>AE.EF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AE.Funny\AE.Funny.csproj">
       <Project>{149c2075-7f68-4993-ba6c-1aaf45a67453}</Project>
       <Name>AE.Funny</Name>

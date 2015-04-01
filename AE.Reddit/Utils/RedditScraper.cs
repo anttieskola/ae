@@ -76,6 +76,8 @@ namespace AE.Reddit.Utils
         {
             List<string> comments = new List<string>();
             comments.Add("first.");
+            comments.Add("second.");
+            comments.Add("third.");
             return comments;
         }
     }

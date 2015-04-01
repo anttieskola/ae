@@ -3,9 +3,9 @@ using Microsoft.Practices.Unity;
 using AE.Mpg.Abstract;
 using AE.Mpg.Dal;
 using AE.Mpg.Entity;
-using AE.WebUI.Controllers.View;
 using AE.Snipplets.Dal;
 using AE.EF.Abstract;
+using AE.Funny.Dal;
 
 namespace AE.WebUI.App_Start
 {
@@ -38,13 +38,17 @@ namespace AE.WebUI.App_Start
         public static void RegisterTypes(IUnityContainer container)
         {
             // TODO: Register your types here
-            container.RegisterType<AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
+            container.RegisterType<Controllers.View.AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
             // mpg injection
             container.RegisterType<IGenericRepository<Vehicle>, GenericRepository<Vehicle>>();
             container.RegisterType<IGenericRepository<Fill>, GenericRepository<Fill>>();
             container.RegisterType<IGenericRepository<Fuel>, GenericRepository<Fuel>>();
             // snipplet injection
-            container.RegisterType<IBasicRepository, SnippletRepository>();
+            container.RegisterType(typeof(Controllers.Api.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
+            container.RegisterType(typeof(Controllers.View.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
+            // funny injection
+            container.RegisterType(typeof(Controllers.View.FunnyController), new InjectionConstructor(typeof(FunnyRepository)));
         }
     }
 }
+

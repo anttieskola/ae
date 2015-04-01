@@ -3,20 +3,25 @@ using System.Data.Entity;
 
 namespace AE.Funny.Dal
 {
-    internal class FunnyContext : DbContext
+    public class FunnyContext : DbContext
     {
-        internal FunnyContext()
+        public FunnyContext()
             : base("DbConnection")
         {
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // Todo: placeholder
+            modelBuilder.HasDefaultSchema("funny");
+            modelBuilder.Entity<Post>()
+                .HasMany<Comment>(p => p.Comments)
+                .WithRequired(c => c.Post)
+                .WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);
         }
 
         // "tables"
-        internal DbSet<FunnyPost> FunnyPosts { get; set; }
+        internal DbSet<Post> Posts { get; set; }
+        internal DbSet<Maintenance> Maintenances { get; set; }
     }
 }

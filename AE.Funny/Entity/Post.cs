@@ -4,18 +4,19 @@ using System.Collections.Generic;
 namespace AE.Funny.Entity
 {
     /// <summary>
-    /// FunnyPost, purpose is to cause you to smile
+    /// Post to make you laugh
     /// </summary>
-    public class FunnyPost
+    public class Post
     {
-        public FunnyPost()
+        public Post()
         {
-            Comments = new List<string>();
+            Comments = new HashSet<Comment>();
         }
-        public int FunnyPostId { get; set; }
+        public int PostId { get; set; }
+        public DateTime Created { get; set; }
         public string RedditId { get; set; }
         public string Title { get; set; }
         public String ImageUrl { get; set; }
-        public List<string> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

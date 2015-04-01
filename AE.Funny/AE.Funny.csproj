@@ -48,10 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FunnyService.cs" />
+    <Compile Include="Entity\Maintenance.cs" />
+    <Compile Include="Entity\Comment.cs" />
+    <Compile Include="Migrations\201503311905397_initial.cs" />
+    <Compile Include="Migrations\201503311905397_initial.Designer.cs">
+      <DependentUpon>201503311905397_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Service\FunnyService.cs" />
     <Compile Include="Dal\FunnyContext.cs" />
     <Compile Include="Dal\FunnyRepository.cs" />
-    <Compile Include="Entity\FunnyPost.cs" />
+    <Compile Include="Entity\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +78,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201503311905397_initial.resx">
+      <DependentUpon>201503311905397_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
