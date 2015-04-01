@@ -40,8 +40,8 @@ namespace AE.Snipplets.Migrations
                 db.SaveChanges();
             }
 
-            // hello world
-            if (!db.Snipplets.Any(s => s.Headline == "Hello world!"))
+            // hello world if no other snipplet
+            if (db.Snipplets.Count() == 0)
             {
                 Snipplet hw = new Snipplet
                 {

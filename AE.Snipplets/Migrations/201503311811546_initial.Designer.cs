@@ -13,7 +13,7 @@ namespace AE.Snipplets.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201502101004413_initial"; }
+            get { return "201503311811546_initial"; }
         }
         
         string IMigrationMetadata.Source

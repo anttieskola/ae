@@ -12,7 +12,7 @@ namespace AE.Snipplets.Dal
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("csharp");
+            modelBuilder.HasDefaultSchema("snipplet");
             // There is a many to many relationship between snipplet and tag so we need to create link table for this
             modelBuilder.Entity<Snipplet>().HasMany<Tag>(s => s.Tags).WithMany(t => t.Snipplets).Map(x => x.MapLeftKey("SnippletId").MapRightKey("TagId").ToTable("SnippletTag"));
             base.OnModelCreating(modelBuilder);

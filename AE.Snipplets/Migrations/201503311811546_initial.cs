@@ -8,7 +8,7 @@ namespace AE.Snipplets.Migrations
         public override void Up()
         {
             CreateTable(
-                "csharp.Snipplets",
+                "snipplet.Snipplets",
                 c => new
                     {
                         SnippletId = c.Int(nullable: false, identity: true),
@@ -18,7 +18,7 @@ namespace AE.Snipplets.Migrations
                 .PrimaryKey(t => t.SnippletId);
             
             CreateTable(
-                "csharp.Tags",
+                "snipplet.Tags",
                 c => new
                     {
                         TagId = c.Int(nullable: false, identity: true),
@@ -27,15 +27,15 @@ namespace AE.Snipplets.Migrations
                 .PrimaryKey(t => t.TagId);
             
             CreateTable(
-                "csharp.SnippletTag",
+                "snipplet.SnippletTag",
                 c => new
                     {
                         SnippletId = c.Int(nullable: false),
                         TagId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.SnippletId, t.TagId })
-                .ForeignKey("csharp.Snipplets", t => t.SnippletId, cascadeDelete: true)
-                .ForeignKey("csharp.Tags", t => t.TagId, cascadeDelete: true)
+                .ForeignKey("snipplet.Snipplets", t => t.SnippletId, cascadeDelete: true)
+                .ForeignKey("snipplet.Tags", t => t.TagId, cascadeDelete: true)
                 .Index(t => t.SnippletId)
                 .Index(t => t.TagId);
             
@@ -43,13 +43,13 @@ namespace AE.Snipplets.Migrations
         
         public override void Down()
         {
-            DropForeignKey("csharp.SnippletTag", "TagId", "csharp.Tags");
-            DropForeignKey("csharp.SnippletTag", "SnippletId", "csharp.Snipplets");
-            DropIndex("csharp.SnippletTag", new[] { "TagId" });
-            DropIndex("csharp.SnippletTag", new[] { "SnippletId" });
-            DropTable("csharp.SnippletTag");
-            DropTable("csharp.Tags");
-            DropTable("csharp.Snipplets");
+            DropForeignKey("snipplet.SnippletTag", "TagId", "snipplet.Tags");
+            DropForeignKey("snipplet.SnippletTag", "SnippletId", "snipplet.Snipplets");
+            DropIndex("snipplet.SnippletTag", new[] { "TagId" });
+            DropIndex("snipplet.SnippletTag", new[] { "SnippletId" });
+            DropTable("snipplet.SnippletTag");
+            DropTable("snipplet.Tags");
+            DropTable("snipplet.Snipplets");
         }
     }
 }
