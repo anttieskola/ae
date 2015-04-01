@@ -1,4 +1,5 @@
-﻿using AE.News;
+﻿using AE.Funny.Service;
+using AE.News;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -21,7 +22,7 @@ namespace AE.Insomnia
     {
 #if DEBUG
         /* dev */
-        public const double UPDATE_INTERVAL_IN_MINUTES = 0.3;
+        public const double UPDATE_INTERVAL_IN_MINUTES = 1;
         public const String API_URI = "http://localhost:65431/api/MakeRequest";
         public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
 #else
@@ -76,9 +77,12 @@ namespace AE.Insomnia
             // wrap maintenance so it won't prevent us from going on
             try
             {
-                // TODO: Add more maintenance tasks here
+                // news
                 NewsContext nc = await NewsContext.GetInstance();
                 await nc.Maintenance();
+                // funny
+                FunnyService fs = FunnyService.Instance;
+                await fs.RunAsync();
             }
             catch (Exception e)
             {
@@ -195,6 +199,9 @@ namespace AE.Insomnia
             {
                 // can't access server
                 Debug.WriteLine("InsomniaApiRequest - Execute - Can't access api server");
+                // launch maintenance from here
+                Debug.WriteLine("InsomniaApiRequest - Execute - launching maintenance");
+                await InsomniaDaemon.Instance.Maintenance();
                 // making new request
                 InsomniaDaemon.Instance.Start();
             }

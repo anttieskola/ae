@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AE.Funny\AE.Funny.csproj">
+      <Project>{149c2075-7f68-4993-ba6c-1aaf45a67453}</Project>
+      <Name>AE.Funny</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AE.News\AE.News.csproj">
       <Project>{4268c76c-f8fc-46af-8b0b-ca7c26294020}</Project>
       <Name>AE.News</Name>
