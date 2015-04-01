@@ -50,9 +50,9 @@
   <ItemGroup>
     <Compile Include="Entity\Maintenance.cs" />
     <Compile Include="Entity\Comment.cs" />
-    <Compile Include="Migrations\201503311905397_initial.cs" />
-    <Compile Include="Migrations\201503311905397_initial.Designer.cs">
-      <DependentUpon>201503311905397_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201504010508388_initial.cs" />
+    <Compile Include="Migrations\201504010508388_initial.Designer.cs">
+      <DependentUpon>201504010508388_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Service\FunnyService.cs" />
@@ -80,8 +80,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201503311905397_initial.resx">
-      <DependentUpon>201503311905397_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201504010508388_initial.resx">
+      <DependentUpon>201504010508388_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

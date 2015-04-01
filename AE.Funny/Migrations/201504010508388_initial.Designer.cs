@@ -13,7 +13,7 @@ namespace AE.Funny.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201503311905397_initial"; }
+            get { return "201504010508388_initial"; }
         }
         
         string IMigrationMetadata.Source

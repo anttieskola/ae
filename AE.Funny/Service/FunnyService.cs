@@ -61,7 +61,7 @@ namespace AE.Funny.Service
         public DateTime LastSuccess()
         {
             DateTime lastSuccess = (from fm in _repo.Query<Maintenance>()
-                                    where fm.Inserted != -1
+                                    where fm.Success == true
                                     orderby fm.EndTime descending
                                     select fm.EndTime).FirstOrDefault();
             return lastSuccess;
@@ -78,7 +78,7 @@ namespace AE.Funny.Service
             {
                 _running = true;
                 Debug.WriteLine("FunnyService, Maintenance, start");
-                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Inserted = -1, Deleted = -1 };
+                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
                 try
                 {
                     fm.Inserted = insert().Result;
@@ -86,6 +86,7 @@ namespace AE.Funny.Service
                     if (fm.Inserted > 0)
                     {
                         fm.Deleted = delete().Result;
+                        fm.Success = true;
                         Debug.WriteLine("FunnyService, Maintenance, delete:{0}", fm.Deleted);
                     }
                 }
@@ -111,7 +112,7 @@ namespace AE.Funny.Service
             {
                 _running = true;
                 Debug.WriteLine("FunnyService, Maintenance, start");
-                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Inserted = -1, Deleted = -1 };
+                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
                 try
                 {
                     fm.Inserted = await insert();
@@ -119,6 +120,7 @@ namespace AE.Funny.Service
                     if (fm.Inserted > 0)
                     {
                         fm.Deleted = await delete();
+                        fm.Success = true;
                         Debug.WriteLine("FunnyService, Maintenance, delete:{0}", fm.Deleted);
                     }
                 }

@@ -12,6 +12,7 @@ namespace AE.Funny.Migrations
                 c => new
                     {
                         MaintenanceId = c.Int(nullable: false, identity: true),
+                        Success = c.Boolean(nullable: false),
                         StartTime = c.DateTime(nullable: false),
                         EndTime = c.DateTime(nullable: false),
                         Inserted = c.Int(nullable: false),
