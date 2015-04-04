@@ -1,32 +1,20 @@
-﻿@using AE.WebUI.ViewModels
-@model NewsViewModel
-
-@{
+﻿@{
     ViewBag.Title = "News";
 }
 
-<!-- news source selection -->
+<!-- bottom bar -->
 <nav class="navbar-fixed-bottom">
+    <!-- about button-->
     <div class="hidden-xs hidden-sm col-md-3 col-lg-5">
         <button id="about" class="btn btn-info">About</button>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7">
+        <!-- tag selection -->
         <form class="form-inline" role="form">
             <div class="input-group">
                 <label for="source" class="input-group-addon my-form-control">Category</label>
-                <select id="source" class="my-form-control">
-                    @foreach (var tag in Model.Tags)
-                    {
-                        if (Model.Tag.Equals(tag))
-                        {
-                            <option selected="selected" value="@tag">@tag</option>
-                        }
-                        else
-                        {
-                            <option value="@tag">@tag</option>
-                        }
-                    }
-                    <option value="*">Everything</option>
+                <select id="selectTag" class="my-form-control">
+                    <!-- options added in load -->
                 </select>
             </div>
         </form>
@@ -46,13 +34,7 @@
                     Source for the news are <a href="http://yle.fi" target="_blank">YLE</a> RSS <a href="http://yle.fi/uutiset/rss-syotteet/6075085" target="_blank">feeds</a>
                 </p>
                 <p>
-                    This is a razor page in a ASP MVC application.
-                    Separate class library implements RSS feed reader and daemon type of functionality which stores news into memory and updates them reguraly.
-                    It will keep news in memory until one month old or server sleeps/restarts.
-                    When user selects a different category JQuery ajax call uses specific controller action to provide partial page with the news of selected category.
-                </p>
-                <p>
-                    In future I might add an admin interface to modify feeds used.
+                    News are fetched in a scheduled job (Quartz) from RSS feeds. Parsed and stored into DB. Each article has a collection of Tags associated into it. Tags are seen as category in this page. DB's tags and articles are fetched into page by making Ajax calls into web api. Page also uses simple infinite scroll. At start only 10 articles are fetched and more as user scrolls at the bottom of page.
                 </p>
             </div>
             <div class="modal-footer">
@@ -62,8 +44,8 @@
     </div>
 </div>
 
-<!-- wheel -->
-<div id="wheel" class="row" style="padding-bottom: 10px;">
+<!-- loading wheel -->
+<div id="loading" class="row" style="padding-bottom: 10px; display: none;">
     <div id="circularG" class="center-block">
         <div id="circularG_1" class="circularG">
         </div>
@@ -84,12 +66,102 @@
     </div>
 </div>
 
-<!-- news listing -->
-<div id="news" class="row" style="padding-bottom: 10px;">
+<!-- articles -->
+<div id="articles" class="row" style="padding-bottom: 10px; display:none;">
+
+    <!-- article template with picture -->
+    <article class="articleTemplatePicture col-xs-12 col-lg-6" style="margin-bottom: 20px;">
+        <div class="col-xs-12" style="margin-bottom: 8px;">
+            <div class="row well well-sm" onclick="expandArticle(this);"
+                 style="cursor: pointer;">
+                <div class="col-xs-10">
+                    <h4 class="articleTitle">Lorem ipsum dolor sit amet</h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4>
+                        <span class="glyphicon glyphicon-chevron-down news-expander">
+                        </span>
+                    </h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4>
+                        <a target="_blank" href="todo">
+                            <span class="glyphicon glyphicon-book"></span>
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="articleDate row pull-right">
+            14:43 23.4.2015
+        </div>
+
+        <div class="col-sm-12 col-lg-6">
+            <img src="~/Images/articleDummy.jpg" width="265" height="149" class="articlePicture" />
+        </div>
+
+        <div class="col-sm-12 col-lg-6">
+            <p class="articleDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div class="articleContent col-xs-12 news-content" style="display: none;">
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </div>
+        <div class="col-xs-12 news-content" style="display: none;">
+            <a href="" target="_blank" class="articleSource">Source</a>
+        </div>
+    </article>
+
+    <!-- article template without picture -->
+    <article class="articleTemplate col-sm-12 col-lg-6" style="margin-bottom: 20px;">
+        <div class="col-xs-12" style="margin-bottom: 8px;">
+            <div class="row well well-sm" onclick="expandArticle(this);"
+                 style="cursor: pointer;">
+                <div class="col-xs-10">
+                    <h4 class="articleTitle">Lorem ipsum dolor sit amet</h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4>
+                        <span class="glyphicon glyphicon-chevron-down news-expander">
+                        </span>
+                    </h4>
+                </div>
+                <div class="col-xs-1">
+                    <h4>
+                        <a target="_blank" href="todo">
+                            <span class="glyphicon glyphicon-book"></span>
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="articleDate row pull-right">
+            14:43 23.4.2015
+        </div>
+        <div class="col-xs-12">
+            <p class="articleDescription">
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            </p>
+        </div>
+        <div class="articleContent col-xs-12 news-content" style="display: none;">
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </div>
+        <div class="col-xs-12 news-content" style="display: none;">
+            <a href="" target="_blank" class="articleSource">Source</a>
+        </div>
+    </article>
 </div>
 
 @section scripts {
     <script>
+        var currentPage = 1;
+        var currentTag = 0;
+        var moreArticles = false;
+        var articleTemplate = null;
+        var articleTemplatePicture = null;
+
         // article show/hide
         function expandArticle(element) {
             var article = $(element).parents('article');
@@ -107,29 +179,105 @@
             }
         }
 
-        // load news of given source id
-        function loadNews(forceRefresh) {
-            var loadNewsUrl = '@Url.Action("News")' + '?tag=' + encodeURIComponent($('#source').val());
-            $('#news').hide();
-            $('#wheel').show();
-            $('#news').load(loadNewsUrl,
-                    function () {
-                        window.scroll(0, 0); // scroll to top, as articles have changed
-                        $('.news-content').toggle(); // hide all contents
-                        $('#wheel').hide();
-                        $('#news').show();
-                    });
-        };
+        // load tags
+        function loadTags() {
+            // api call to get list of tags
+            $.getJSON("/api/news/tags", function (response) {
+                // check that response is array
+                if (Object.prototype.toString.call(response) === '[object Array]') {
+                    // tag select element
+                    var tagSelect = $('#selectTag');
+                    for (var i = 0; i < response.length; i++) {
+                        $('<option/>', { value: response[i].Id, text: response[i].Name }).appendTo(tagSelect);
+                    }
+                    selectTagChange(); // trigger (causes first tag's news to be loaded in during page load)
+                }
+            });
+        }
 
+        // tag change
+        function selectTagChange() {
+            currentTag = $('#selectTag').val(); // tag
+            currentPage = 0; //  reset page
+            moreArticles = true;
+            $('#articles').html(""); // empty news
+            $('#loading').show(); // show loading
+            addArticles();
+        }
+
+        // add articles
+        function addArticles() {
+            // next page
+            currentPage++;
+            // build url with tag and page
+            var articlesUrl = "/api/news/articles?";
+            if (currentTag !== 0) {
+                articlesUrl += "tag=" + currentTag + "&";
+            }
+            articlesUrl += "page=" + currentPage;
+            $.getJSON(articlesUrl, function (response) {
+                $('#loading').hide(); // hide loading
+                // check response is array
+                if (Object.prototype.toString.call(response) === '[object Array]') {
+                    // loop thru articles
+                    for (var i = 0; i < response.length; i++) {
+                        var article;
+                        // template with image or no?
+                        if (response[i].ImageUrl != null) {
+                            article = articleTemplatePicture.clone();
+                            article.find('.articlePicture').attr("src", response[i].ImageUrl);
+                        } else {
+                            article = articleTemplate.clone();
+                        }
+                        // add content
+                        article.find('.articleTitle').text(response[i].Title);
+                        article.find('.articleDescription').text(response[i].Description);
+                        article.find('.articleContent').html(response[i].Content);
+                        article.find('.articleSource').attr("href", response[i].SourceUrl);
+                        // add filled template to articles
+                        article.appendTo('#articles');
+                    }
+                    // are there any more articles?
+                    if (response.length == 0) {
+                        moreArticles = false;
+                    }
+                } else {
+                    $('#articles').html("<p>Sorry, error occured loading articles please try refreshing page.</p>");
+                }
+            });
+        }
+
+        // "infinite scroll"
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                if (moreArticles) {
+                    addArticles();
+                }
+            }
+        });
+
+        // about dialog
         function showAbout() {
             $('#aboutModal').modal('show');
         };
 
+
         // doc rdy
         $(function () {
-            $('#source').change(function () { loadNews(false); }); // listener to load different source
+            // create templates
+            articleTemplate = $('.articleTemplate').clone();
+            articleTemplate.removeClass('articleTemplate');
+            articleTemplatePicture = $('.articleTemplatePicture').clone();
+            articleTemplatePicture.removeClass('articleTemplate');
+            $('#articles').html(""); // remove templates
+            $('#articles').show(); // now that it is empty, show it
+
+            // load
+            loadTags();
+
+            // set listeners
+            $('#selectTag').change(selectTagChange);
             $('#about').on('click', showAbout);
-            loadNews(); // initial load
         });
     </script>
 }

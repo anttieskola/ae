@@ -6,9 +6,20 @@ using System.Web;
 
 namespace AE.WebUI.ViewModels
 {
-    public class NewsViewModel
+    public class TagModel
     {
-        public IEnumerable<string> Tags { get; set; } // available tags
-        public string Tag { get; set; } // current
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class ArticleModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Content { get; set; }
+        public string ImageUrl { get; set; }
+        public string SourceUrl { get; set; }
+        public DateTime Date { get; set; }
     }
 }

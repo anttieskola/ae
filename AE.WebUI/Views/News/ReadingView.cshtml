@@ -1,5 +1,5 @@
-﻿@using AE.News.Entity
-@model NewsArticle
+﻿@using AE.WebUI.ViewModels
+@model ArticleModel
 
 @{
     Layout = null;
@@ -25,10 +25,10 @@
     <div class="row text-center">
         <h3>@Model.Title</h3>
     </div>
-    @if (Model.Image != null)
+    @if (Model.ImageUrl != null)
     {
         <figure class="row text-center">
-            <img src="@Model.Image" width="400" height="225" />
+            <img src="@Model.ImageUrl" width="400" height="225" />
             <figcaption>Picture</figcaption>
         </figure>
     }
@@ -39,7 +39,7 @@
         @Html.Raw(@Model.Content)
     </div>
     <div class="row">
-        <a href="@Model.Source">Source</a>
+        <a href="@Model.SourceUrl">Source</a>
     </div>
     @Scripts.Render("~/bundles/js")
 </body>

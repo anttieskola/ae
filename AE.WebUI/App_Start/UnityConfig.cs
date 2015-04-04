@@ -6,6 +6,7 @@ using AE.Mpg.Entity;
 using AE.Snipplets.Dal;
 using AE.EF.Abstract;
 using AE.Funny.Dal;
+using AE.News.Dal;
 
 namespace AE.WebUI.App_Start
 {
@@ -39,14 +40,17 @@ namespace AE.WebUI.App_Start
         {
             // TODO: Register your types here
             container.RegisterType<Controllers.View.AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
-            // mpg injection
+            // mpg
             container.RegisterType<IGenericRepository<Vehicle>, GenericRepository<Vehicle>>();
             container.RegisterType<IGenericRepository<Fill>, GenericRepository<Fill>>();
             container.RegisterType<IGenericRepository<Fuel>, GenericRepository<Fuel>>();
-            // snipplet injection
+            // news
+            container.RegisterType(typeof(Controllers.Api.NewsController), new InjectionConstructor(typeof(NewsRepository)));
+            container.RegisterType(typeof(Controllers.View.NewsController), new InjectionConstructor(typeof(NewsRepository)));
+            // snipplet
             container.RegisterType(typeof(Controllers.Api.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
             container.RegisterType(typeof(Controllers.View.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
-            // funny injection
+            // funny
             container.RegisterType(typeof(Controllers.View.FunnyController), new InjectionConstructor(typeof(FunnyRepository)));
         }
     }

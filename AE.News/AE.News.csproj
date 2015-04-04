@@ -52,18 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IFeed.cs" />
-    <Compile Include="Abstract\INewsRepository.cs" />
-    <Compile Include="Abstract\IYleRepository.cs" />
     <Compile Include="Dal\NewsContext.cs" />
     <Compile Include="Dal\NewsRepository.cs" />
     <Compile Include="Entity\Article.cs" />
     <Compile Include="Entity\Feed.cs" />
     <Compile Include="Entity\Maintenance.cs" />
-    <Compile Include="Entity\NewsArticle.cs" />
-    <Compile Include="Entity\NewsFeed.cs" />
-    <Compile Include="Entity\NewsSource.cs" />
-    <Compile Include="Entity\NewsItem.cs" />
     <Compile Include="Entity\Tag.cs" />
     <Compile Include="Migrations\201504021723489_initial.cs" />
     <Compile Include="Migrations\201504021723489_initial.Designer.cs">
@@ -71,9 +64,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Service\NewsService.cs" />
-    <Compile Include="YleFeeds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NewsContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AE.EF\AE.EF.csproj">

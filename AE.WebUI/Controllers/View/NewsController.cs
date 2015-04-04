@@ -1,62 +1,50 @@
-﻿using AE.News;
-using AE.News.Abstract;
+﻿using AE.EF.Abstract;
 using AE.News.Entity;
 using AE.WebUI.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+using System.Net;
 using System.Web.Mvc;
 
 namespace AE.WebUI.Controllers.View
 {
     public class NewsController : Controller
     {
-        private const string defaultTag = "In English";
+        private IBasicRepository _repo;
 
-        [HttpGet]
-        public async Task<ViewResult> Index()
+        public NewsController(IBasicRepository repo)
         {
-            NewsContext nc = await NewsContext.Instance;
-            NewsViewModel vm = new NewsViewModel
-            {
-                Tags = new List<string>(nc.Tags()),
-                Tag = nc.Tags().FirstOrDefault()
-            };
-            return View(vm);
+            _repo = repo;
         }
 
         [HttpGet]
-        public async Task<PartialViewResult> News(string tag = null)
+        public ActionResult Index()
         {
-            NewsContext nc = await NewsContext.Instance;
-            if (tag == null)
-            {
-                // get default or first
-                if (nc.Tags().Any(t => t.Equals(defaultTag)))
-                {
-                    return PartialView("_News", nc.Get(defaultTag));
-                }
-                else
-                {
-                    return PartialView("_News", nc.Get(nc.Tags().First()));
-                }
-            }
-            // all articles
-            if (tag.Equals("*"))
-            {
-                return PartialView("_News", nc.Get());
-            }
-            // just given tag
-            return PartialView("_News", nc.Get(tag));
+            return View();
         }
 
         [HttpGet]
-        public async Task<ViewResult> ReadingView(int articleId)
+        public ActionResult ReadingView(int? id = null)
         {
-            NewsContext nc = await NewsContext.Instance;
-            return View(nc.Get((int)articleId));
+            if (id != null)
+            {
+                var article = (from a in _repo.Query<Article>()
+                               where a.ArticleId == (int)id
+                               select new ArticleModel
+                               {
+                                   Id = a.ArticleId,
+                                   Title = a.Title,
+                                   Description = a.Description,
+                                   Content = a.Content,
+                                   ImageUrl = a.ImageUrl,
+                                   SourceUrl = a.SourceUrl,
+                                   Date = a.Date
+                               }).FirstOrDefault();
+                if (article != null)
+                {
+                    return View(article as ArticleModel);
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.NotFound);
         }
     }
 }
