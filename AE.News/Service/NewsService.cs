@@ -106,44 +106,49 @@ namespace AE.News.Service
             // fetch feeds from db
             List<Feed> feeds = _repo.Query<Feed>().ToList();
             // fetch articles from feeds
-            List<Article> articles = await Task<List<Article>>.Factory.StartNew(
+            List<Article> feedArticles = await Task<List<Article>>.Factory.StartNew(
                 (list) => { return fetchFeeds((List<Feed>)list); }, feeds);
-
-            // Feeds contain same article many times and we want to add it only once
-            // to repository. When we encounter new article do we gather all tags for it.
-            foreach (Article article in articles)
+            // gather all tags for articles
+            foreach (Article a in feedArticles)
             {
-                bool isNew = true;
-                if (_repo.Query<Article>().Any(a => a.SourceUrl == article.SourceUrl))
+                foreach (Article at in feedArticles)
                 {
-                    continue; // skip as in repository already
-                }
-                // new article, gather tags for it
-                foreach (Article check in articles)
-                {
-                    // only compare to others
-                    if (check == article)
+                    if (a == at)
                     {
                         continue;
                     }
-                    // add different tag if same article
-                    if (check.SourceUrl == article.SourceUrl)
+                    if (a.SourceUrl == at.SourceUrl)
                     {
-                        isNew = false;
-                        Tag addTag = check.Tags.FirstOrDefault();
-                        if (addTag != null)
-                        {
-                            article.Tags.Add(addTag);
-                        }
+                        a.Tags.Add(at.Tags.FirstOrDefault());
                     }
                 }
-                _repo.Insert<Article>(article);
-                await _repo.CommitAsync();
-                if (isNew)
+            }
+            // add new articles and update tags if missing (failed fetch earlier...)
+            foreach (Article article in feedArticles)
+            {
+                Article dbArticle = _repo.Query<Article>().FirstOrDefault(a => a.SourceUrl == article.SourceUrl);
+                if (dbArticle != null)
                 {
+                    // check that article in db contains atleast the same tags our current fetch got
+                    List<Tag> newTags = new List<Tag>(article.Tags.Except(dbArticle.Tags));
+                    if (newTags.Count > 0)
+                    {
+                        // add missing tags
+                        foreach (Tag t in newTags)
+                        {
+                            dbArticle.Tags.Add(t);
+                        }
+                        _repo.Update<Article>(dbArticle);
+                    }
+                }
+                else
+                {
+                    // new article
+                    _repo.Insert<Article>(article);
                     newArticles++;
                 }
             }
+            await _repo.CommitAsync();
             return newArticles;
         }
 
