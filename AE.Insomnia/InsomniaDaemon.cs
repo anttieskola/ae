@@ -1,5 +1,6 @@
 ﻿using AE.Funny.Service;
 using AE.News;
+using AE.News.Service;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -25,11 +26,15 @@ namespace AE.Insomnia
         public const double UPDATE_INTERVAL_IN_MINUTES = 1;
         public const String API_URI = "http://localhost:65431/api/MakeRequest";
         public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
+        public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 1;
+        public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 1;
 #else
         /* azure */
         public const double UPDATE_INTERVAL_IN_MINUTES = 10;
         public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
         public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
+        public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 15;
+        public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 45;
 #endif
         private const String JOB_PREFIX = "ID_JOB_";
         private const String TRIGGER_PREFIX = "ID_TRIGGER_";
@@ -77,18 +82,27 @@ namespace AE.Insomnia
             // wrap maintenance so it won't prevent us from going on
             try
             {
-                // news
-                NewsContext nc = await NewsContext.GetInstance();
-                await nc.Maintenance();
-                // funny
+                // We will run news service around every 15 mins
+                NewsService ns = NewsService.Instance;
+                if (DateTime.UtcNow.Subtract(ns.LastSuccess()).TotalMinutes > NEWS_UPDATE_INTERVAL_IN_MINUTES)
+                {
+                    await ns.RunAsync();
+                }
+                // We will run funny service around once per hour
                 FunnyService fs = FunnyService.Instance;
-                await fs.RunAsync();
+                if (DateTime.UtcNow.Subtract(fs.LastSuccess()).TotalMinutes > FUNNY_UPDATE_INTERVAL_IN_MINUTES)
+                {
+                    await fs.RunAsync();
+                }
             }
             catch (Exception e)
             {
                 Debug.WriteLine("InsomniaDeamon - Maintenance - Fatal exception: {0}", e.Message);
             }
-            Start();
+            if (!isJobScheduled())
+            {
+                scheduleJob();
+            }
         }
 
         /// <summary>
@@ -97,10 +111,7 @@ namespace AE.Insomnia
         public void Start()
         {
             Debug.WriteLine("InsomniaDaemon - Start");
-            if (!isJobScheduled())
-            {
-                scheduleJob();
-            }
+            Task.Factory.StartNew(() => Maintenance().Wait());
         }
 
         /// <summary>
