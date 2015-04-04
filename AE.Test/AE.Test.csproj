@@ -96,6 +96,7 @@
     <Compile Include="News_YleFeeds.cs" />
     <Compile Include="Funny_FunnyService.cs" />
     <Compile Include="Reddit_RedditPost.cs" />
+    <Compile Include="News_NewsService.cs" />
     <Compile Include="WebUI_MpgAdmin.cs" />
     <Compile Include="Imgur_ImgurScraper.cs" />
   </ItemGroup>
