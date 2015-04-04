@@ -45,7 +45,7 @@
 </div>
 
 <!-- loading wheel -->
-<div id="loading" class="row" style="padding-bottom: 10px; display: none;">
+<div id="loading" class="row" style="padding-bottom: 10px;">
     <div id="circularG" class="center-block">
         <div id="circularG_1" class="circularG">
         </div>
@@ -70,10 +70,9 @@
 <div id="articles" class="row" style="padding-bottom: 10px; display:none;">
 
     <!-- article template with picture -->
-    <article class="articleTemplatePicture col-xs-12 col-lg-6" style="margin-bottom: 20px;">
-        <div class="col-xs-12" style="margin-bottom: 8px;">
-            <div class="row well well-sm" onclick="expandArticle(this);"
-                 style="cursor: pointer;">
+    <article class="articleTemplatePicture col-xs-12 col-lg-6" style="margin-bottom: 21px;">
+        <div class="col-sm-12" style="margin-bottom: 7px;">
+            <div class="row well well-sm" onclick="expandArticle(this);" style="cursor: pointer; margin-top: 0px; margin-bottom: 0px;">
                 <div class="col-xs-10">
                     <h4 class="articleTitle">Lorem ipsum dolor sit amet</h4>
                 </div>
@@ -85,39 +84,35 @@
                 </div>
                 <div class="col-xs-1">
                     <h4>
-                        <a target="_blank" href="todo">
+                        <a target="_blank" href="" class="articleReadingView">
                             <span class="glyphicon glyphicon-book"></span>
                         </a>
                     </h4>
                 </div>
             </div>
         </div>
-        <div class="articleDate row pull-right">
-            14:43 23.4.2015
+        <div class="col-xs-12 col-sm-6" style="cursor: pointer;" onclick="expandArticle(this);">
+            <img src="~/Images/articleDummy.jpg" width="265" height="149" class="articlePicture" style="margin-top: 10px;"/>
         </div>
-
-        <div class="col-sm-12 col-lg-6">
-            <img src="~/Images/articleDummy.jpg" width="265" height="149" class="articlePicture" />
-        </div>
-
-        <div class="col-sm-12 col-lg-6">
+        <div class="col-xs-12 col-sm-6" style="margin-top: 7px;">
             <p class="articleDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
-
-        <div class="articleContent col-xs-12 news-content" style="display: none;">
+        <div class="articleContent col-xs-12 news-content" style="margin-top:14px;">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         </div>
-        <div class="col-xs-12 news-content" style="display: none;">
+        <div class="col-xs-offset-2 col-xs-4 news-content">
             <a href="" target="_blank" class="articleSource">Source</a>
+        </div>
+        <div class="col-xs-4 news-content">
+            <h6 style="text-align: right;" class="articleDate">14:43 23.4.2015</h6>
         </div>
     </article>
 
     <!-- article template without picture -->
-    <article class="articleTemplate col-sm-12 col-lg-6" style="margin-bottom: 20px;">
-        <div class="col-xs-12" style="margin-bottom: 8px;">
-            <div class="row well well-sm" onclick="expandArticle(this);"
-                 style="cursor: pointer;">
+    <article class="articleTemplate col-xs-12 col-lg-6" style="margin-bottom: 21px;">
+        <div class="col-sm-12" style="margin-bottom: 7px;">
+            <div class="row well well-sm" onclick="expandArticle(this);" style="cursor: pointer; margin-top: 0px; margin-bottom: 0px;">
                 <div class="col-xs-10">
                     <h4 class="articleTitle">Lorem ipsum dolor sit amet</h4>
                 </div>
@@ -129,30 +124,27 @@
                 </div>
                 <div class="col-xs-1">
                     <h4>
-                        <a target="_blank" href="todo">
+                        <a target="_blank" href="" class="articleReadingView">
                             <span class="glyphicon glyphicon-book"></span>
                         </a>
                     </h4>
                 </div>
             </div>
         </div>
-        <div class="articleDate row pull-right">
-            14:43 23.4.2015
+        <div class="col-xs-12" style="margin-top: 7px;">
+            <p class="articleDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
-        <div class="col-xs-12">
-            <p class="articleDescription">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            </p>
-        </div>
-        <div class="articleContent col-xs-12 news-content" style="display: none;">
+        <div class="articleContent col-xs-12 news-content" style="margin-top:14px;">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         </div>
-        <div class="col-xs-12 news-content" style="display: none;">
+        <div class="col-xs-offset-2 col-xs-4 news-content">
             <a href="" target="_blank" class="articleSource">Source</a>
         </div>
+        <div class="col-xs-4 news-content">
+            <h6 style="text-align: right;" class="articleDate">14:43 23.4.2015</h6>
+        </div>
     </article>
-</div>
 
 @section scripts {
     <script>
@@ -190,6 +182,7 @@
                     for (var i = 0; i < response.length; i++) {
                         $('<option/>', { value: response[i].Id, text: response[i].Name }).appendTo(tagSelect);
                     }
+                    $('<option value="0">Everything</option>').appendTo(tagSelect);
                     selectTagChange(); // trigger (causes first tag's news to be loaded in during page load)
                 }
             });
@@ -211,7 +204,8 @@
             currentPage++;
             // build url with tag and page
             var articlesUrl = "/api/news/articles?";
-            if (currentTag !== 0) {
+            // 0 tag is added separetely at top, without tag we get all articles
+            if (currentTag !== '0') {
                 articlesUrl += "tag=" + currentTag + "&";
             }
             articlesUrl += "page=" + currentPage;
@@ -233,7 +227,10 @@
                         article.find('.articleTitle').text(response[i].Title);
                         article.find('.articleDescription').text(response[i].Description);
                         article.find('.articleContent').html(response[i].Content);
+                        article.find('.articleDate').html(formatSqlDateString(response[i].Date));
                         article.find('.articleSource').attr("href", response[i].SourceUrl);
+                        article.find('.articleReadingView').attr("href", '/news/readingview/' + response[i].Id);
+                        article.children('.news-content').hide();
                         // add filled template to articles
                         article.appendTo('#articles');
                     }
@@ -245,6 +242,15 @@
                     $('#articles').html("<p>Sorry, error occured loading articles please try refreshing page.</p>");
                 }
             });
+        }
+
+        function formatSqlDateString(sqlDateString) {
+            // 2015-12-03 21:44:22.000
+            var da = sqlDateString.split(/[-T:]/);
+            // 21:44
+            // 3.12.2015
+            var newDateString = da[3] + ":" + da[4] + " " + da[2] + "." + da[1] + "." + da[0];
+            return newDateString;
         }
 
         // "infinite scroll"
