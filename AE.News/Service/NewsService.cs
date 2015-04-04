@@ -108,9 +108,16 @@ namespace AE.News.Service
             // fetch articles from feeds
             List<Article> feedArticles = await Task<List<Article>>.Factory.StartNew(
                 (list) => { return fetchFeeds((List<Feed>)list); }, feeds);
-            // gather all tags for articles
+            // gather all tags for articles and remove duplicates
+            List<Article> articles = new List<Article>();
             foreach (Article a in feedArticles)
             {
+                // we gathered tags for this one?
+                if (articles.Any(x => x.SourceUrl == a.SourceUrl))
+                {
+                    continue;
+                }
+                // gather tags
                 foreach (Article at in feedArticles)
                 {
                     if (a == at)
@@ -122,9 +129,11 @@ namespace AE.News.Service
                         a.Tags.Add(at.Tags.FirstOrDefault());
                     }
                 }
+                // add to gathered list
+                articles.Add(a);
             }
             // add new articles and update tags if missing (failed fetch earlier...)
-            foreach (Article article in feedArticles)
+            foreach (Article article in articles)
             {
                 Article dbArticle = _repo.Query<Article>().FirstOrDefault(a => a.SourceUrl == article.SourceUrl);
                 if (dbArticle != null)
