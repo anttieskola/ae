@@ -255,7 +255,8 @@
 
         // "infinite scroll"
         $(window).scroll(function () {
-            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            // one article row is around 250
+            if (($(window).scrollTop() + 250)>= $(document).height() - $(window).height()) {
                 if (moreArticles) {
                     addArticles();
                 }
