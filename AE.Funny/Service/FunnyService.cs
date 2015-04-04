@@ -54,7 +54,7 @@ namespace AE.Funny.Service
         #endregion
 
         /// <summary>
-        /// When maintenance was last ran successfully.
+        /// When maintenance was last ran successfully (UtcTime).
         /// Note! Will be DateTime.MinValue if never ran.
         /// </summary>
         /// <returns>UtcTime</returns>
@@ -70,68 +70,33 @@ namespace AE.Funny.Service
         /// <summary>
         /// Maintenance run, fetches new posts and manages repository.
         /// Might fail miserably.
-        /// Note! This call will block the caller for around 5...20 seconds.
-        /// </summary>
-        public void Run()
-        {
-            if (!_running)
-            {
-                _running = true;
-                Debug.WriteLine("FunnyService, Maintenance, start");
-                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
-                try
-                {
-                    fm.Inserted = insert().Result;
-                    Debug.WriteLine("FunnyService, Maintenance, insert:{0}", fm.Inserted);
-                    if (fm.Inserted > 0)
-                    {
-                        fm.Deleted = delete().Result;
-                        fm.Success = true;
-                        Debug.WriteLine("FunnyService, Maintenance, delete:{0}", fm.Deleted);
-                    }
-                }
-                catch (AggregateException ae)
-                {
-                    Debug.WriteLine("FunnyService, Maintenance, exception:{0}", ae.Message);
-                }
-                fm.EndTime = DateTime.UtcNow;
-                _repo.Insert<Maintenance>(fm);
-                _repo.Commit();
-                Debug.WriteLine("FunnyService, Maintenance, end");
-                _running = false;
-            }
-        }
-
-        /// <summary>
-        /// Maintenance run, fetches new posts and manages repository.
-        /// Might fail miserably.
         /// </summary>
         public async Task RunAsync()
         {
             if (!_running)
             {
                 _running = true;
-                Debug.WriteLine("FunnyService, Maintenance, start");
+                Debug.WriteLine("FunnyService, start");
                 Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
                 try
                 {
                     fm.Inserted = await insert();
-                    Debug.WriteLine("FunnyService, Maintenance, insert:{0}", fm.Inserted);
+                    Debug.WriteLine("FunnyService, insert:{0}", fm.Inserted);
                     if (fm.Inserted > 0)
                     {
                         fm.Deleted = await delete();
                         fm.Success = true;
-                        Debug.WriteLine("FunnyService, Maintenance, delete:{0}", fm.Deleted);
+                        Debug.WriteLine("FunnyService, delete:{0}", fm.Deleted);
                     }
                 }
                 catch (AggregateException ae)
                 {
-                    Debug.WriteLine("FunnyService, Maintenance, exception:{0}", ae.Message);
+                    Debug.WriteLine("FunnyService, exception:{0}", ae.Message);
                 }
                 fm.EndTime = DateTime.UtcNow;
                 _repo.Insert<Maintenance>(fm);
                 await _repo.CommitAsync();
-                Debug.WriteLine("FunnyService, Maintenance, end");
+                Debug.WriteLine("FunnyService, end");
                 _running = false;
             }
         }
