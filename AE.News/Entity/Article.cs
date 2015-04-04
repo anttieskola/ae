@@ -13,7 +13,7 @@ namespace AE.News.Entity
             Tags = new HashSet<Tag>();
         }
         public int ArticleId { get; set; }
-        public ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }
