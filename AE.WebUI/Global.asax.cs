@@ -17,6 +17,7 @@ namespace AE.WebUI
             Mpg.Migrations.Run.Migration();
             Snipplets.Migrations.Run.Migration();
             Funny.Migrations.Run.Migration();
+            News.Migrations.Run.Migration();
         }
 
         /// <summary>
