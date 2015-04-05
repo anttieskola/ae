@@ -1,8 +1,10 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "JS";
 }
-
-<ul class="list-group" style="margin-top: 25px">
-    <li class="list-group-item">@Html.ActionLink("Maze generation", "Show", new { name = "Maze" })</li>
-    <li class="list-group-item">@Html.ActionLink("Breakout demo", "Show", new { name = "Breakout" })</li>
-</ul>
+<div class="col-sm-6 col-sm-offset-3">
+    <ul class="list-group" style="margin-top: 25px">
+        <li class="list-group-item list-group-item-heading">Some simple javascript samples</li>
+        <li class="list-group-item">@Html.ActionLink("Maze generation", "Show", new { name = "Maze" })</li>
+        <li class="list-group-item">@Html.ActionLink("Breakout demo", "Show", new { name = "Breakout" })</li>
+    </ul>
+</div>

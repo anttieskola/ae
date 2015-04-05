@@ -1,14 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Maze";
+    ViewBag.Title = "Breakout";
 }
 
 <article style="margin-top: 20px;">
-    <div class="col-sm-12 col-lg-6" style="margin-left: -25px;">
+    <div class="row col-xs-12 col-sm-6 col-sm-offset-3">
         <canvas id="breakoutCanvas" width="320" height="240"></canvas>
     </div>
-
-    <div class="col-sm-12 col-lg-6">
-        <a href="~/Scripts/breakout.js">source code</a>
+    <div class="col-xs-12 col-sm-3 col-sm-offset-3">
+        <a href="~/Scripts/breakout.js" target="_blank">Source</a>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+        @Html.ActionLink("Back", "Index", "JS")
     </div>
 </article>
 

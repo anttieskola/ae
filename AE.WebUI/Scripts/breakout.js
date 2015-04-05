@@ -34,8 +34,8 @@
         /* setup animation */
         setupAnimation: function () {
             if (BO.height && BO.width) {
-                var newHeight = document.body.clientHeight;
-                var newWidth = document.body.clientWidth;
+                var newHeight = BO.C.canvas.height;
+                var newWidth = BO.C.canvas.width;
                 // check do we really need to reset all
                 if ((newHeight == BO.height) && (newWidth == BO.width)) {
                     return;
@@ -43,15 +43,12 @@
             }
             // helper variables
             BO.animTime = Date.now();
-            BO.height = document.body.clientHeight;
-            BO.width = document.body.clientWidth;
+            BO.height = BO.C.canvas.height;
+            BO.width = BO.C.canvas.width;
             BO.spawnTimePassed = 0;
             BO.fps = 0;
             BO.frame = 0;
             BO.framesTime = 0;
-            // canvas size
-            BO.C.canvas.height = BO.height;
-            BO.C.canvas.width = BO.width;
             // ball
             BO.Ball = {};
             BO.Ball.x = BO.width / 2;
