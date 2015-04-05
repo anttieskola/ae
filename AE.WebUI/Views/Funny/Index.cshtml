@@ -2,26 +2,151 @@
     ViewBag.Title = "Funny";
 }
 
-<div class="col-xs-12">
-    <p>Sorry still working on this one.</p>
-    <img src="~/Images/trouble-afoot.jpg"/>
+<!-- negative margin to leave no space between title well and menu -->
+<div style="margin-top: -13px;">
+    <!-- previous -->
+    <div id="Previous" class="col-xs-1 carousel-control left" style="cursor: pointer; top: 50px; z-index: 1;">
+        <a role="button">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+    </div>
+    <!-- content-->
+    <div id="Content" class="col-xs-10 carousel-inner" style="z-index: 0; display:none">
+        <!-- title -->
+        <div class="well well-sm" style="margin: 0px; background: #ffffff;">
+            <h4 id="Title" style="text-align:center;">Add title here</h4>
+        </div>
+        <!-- picture -->
+        <div style="margin: 7px 0px 0px 0px;">
+            <img id="Image" src="" style="max-width: 100%; max-height: 100%; cursor: pointer;" class="center-block">
+        </div>
+        <!-- source, 3 comments -->
+        <div class="panel panel-default" style="margin: 7px 0px 0px 0px;">
+            <div class="panel-heading" style="text-align: center; background: #ffffff;">
+                <a id="Source" href="" target="_blank">Source</a>
+            </div>
+            <div id="Comments" class="panel-body">
+                <p>Insert comment</p>
+                <p>Insert comment</p>
+                <p>Insert comment</p>
+            </div>
+        </div>
+    </div>
+    <div id="ContentLoading" class="col-xs-10 carousel-inner">
+        <div id="circularG" class="center-block" style="margin-top: 100px;">
+            <div id="circularG_1" class="circularG">
+            </div>
+            <div id="circularG_2" class="circularG">
+            </div>
+            <div id="circularG_3" class="circularG">
+            </div>
+            <div id="circularG_4" class="circularG">
+            </div>
+            <div id="circularG_5" class="circularG">
+            </div>
+            <div id="circularG_6" class="circularG">
+            </div>
+            <div id="circularG_7" class="circularG">
+            </div>
+            <div id="circularG_8" class="circularG">
+            </div>
+        </div>
+    </div>
+    <!-- next -->
+    <div id="Next" class="col-xs-1 carousel-control right" style="cursor: pointer; top: 50px; z-index: 1;">
+        <a role="button">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
 </div>
+@section scripts {
+    <script>
+        var page = 0; // current page (in api)
+        var index = -1; // index of post in array
+        var posts = null; // post array
+        var busy = false; // are we loading more posts from api?
 
-@*
-<div class="col-xs-6">
-    <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true">Previous</span>
-    </button>
-</div>
+        // previous click
+        function previous() {
+            if (index > 0 && !busy) {
+                index--;
+                showPost();
+            }
+        }
 
+        // next click
+        function next() {
+            // posts have been loaded
+            if (posts && !busy) {
+                // there is next post rdy
+                if (posts.length > index + 1) {
+                    index++;
+                    loadPost();
+                } else {
+                    getMorePosts();
+                }
+            }
+        }
 
-<div class="col-xs-6">
-    <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true">Next</span>
-    </button>
-</div>
+        // load more posts from api
+        function getMorePosts() {
+            busy = true;
+            page++;
+            $.getJSON('/api/funny/posts?page=' + page, function (res) {
+                busy = false;
+                if (Object.prototype.toString.call(res) === '[object Array]') {
+                    if (posts === null) {
+                        // first
+                        posts = res;
+                    } else {
+                        // add
+                        posts = posts.concat(res);
+                    }
+                    next(); // open next
+                } else {
+                    showError();
+                }
+            });
+        }
 
-<div class="col-xs-12">
-    
-</div>
-*@
+        // load post data
+        function loadPost() {
+            $('#Content').slideUp(100);
+            $('#ContentLoading').fadeIn(100);
+            var nextImage = new Image();
+            nextImage.src = posts[index].ImageUrl;
+            nextImage.onload = function () {
+                showPost();
+                $('#ContentLoading').fadeOut(100);
+                $('#Content').slideDown(100);
+            };
+        }
+
+        // set's post visible
+        function showPost() {
+            $('#Title').text(posts[index].Title);
+            $('#Image').attr('src', posts[index].ImageUrl);
+            $('#Source').attr('href', posts[index].SourceUrl);
+            var commentDiv = $('<div/>');
+            for (var i = 0; i < posts[index].Comments.length; i++) {
+                $('<p>' + posts[index].Comments[i] + '</p>').appendTo(commentDiv);
+            }
+            $('#Comments').html(commentDiv);
+        }
+
+        // error
+        function showError() {
+            $('#Title').text("Sorry, error loading posts. Please try to refresh page.");
+        }
+
+        // doc rdy
+        $(function () {
+            $('#Previous').click(previous);
+            $('#Next').click(next);
+            $('#Image').click(next);
+            getMorePosts();
+        });
+    </script>
+}

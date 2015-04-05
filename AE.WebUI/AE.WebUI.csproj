@@ -271,6 +271,7 @@
     <Compile Include="App_Start\UnityResolver.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\CSharpController.cs" />
+    <Compile Include="Controllers\Api\FunnyController.cs" />
     <Compile Include="Controllers\Api\NewsController.cs" />
     <Compile Include="Controllers\View\AccountController.cs" />
     <Compile Include="Controllers\View\BlogController.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="ViewModels\BlogViewModels.cs" />
     <Compile Include="ViewModels\CSharpViewModels.cs" />
+    <Compile Include="ViewModels\FunnyViewModels.cs" />
     <Compile Include="ViewModels\MpgAdminViewModels.cs" />
     <Compile Include="ViewModels\MpgApiModels.cs" />
     <Compile Include="ViewModels\MpgViewModel.cs" />

@@ -33,25 +33,26 @@ namespace AE.WebUI.App_Start
         #endregion
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
-        /// <param name="container">The unity container to configure.</param>
+        /// <param name="c">The unity container to configure.</param>
         /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
-        public static void RegisterTypes(IUnityContainer container)
+        public static void RegisterTypes(IUnityContainer c)
         {
             // TODO: Register your types here
-            container.RegisterType<Controllers.View.AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
+            c.RegisterType<Controllers.View.AccountController>(new InjectionConstructor()); // tell unity to use constructor without parameters
             // mpg
-            container.RegisterType<IGenericRepository<Vehicle>, GenericRepository<Vehicle>>();
-            container.RegisterType<IGenericRepository<Fill>, GenericRepository<Fill>>();
-            container.RegisterType<IGenericRepository<Fuel>, GenericRepository<Fuel>>();
+            c.RegisterType<IGenericRepository<Vehicle>, GenericRepository<Vehicle>>();
+            c.RegisterType<IGenericRepository<Fill>, GenericRepository<Fill>>();
+            c.RegisterType<IGenericRepository<Fuel>, GenericRepository<Fuel>>();
             // news
-            container.RegisterType(typeof(Controllers.Api.NewsController), new InjectionConstructor(typeof(NewsRepository)));
-            container.RegisterType(typeof(Controllers.View.NewsController), new InjectionConstructor(typeof(NewsRepository)));
+            c.RegisterType(typeof(Controllers.Api.NewsController), new InjectionConstructor(typeof(NewsRepository)));
+            c.RegisterType(typeof(Controllers.View.NewsController), new InjectionConstructor(typeof(NewsRepository)));
             // snipplet
-            container.RegisterType(typeof(Controllers.Api.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
-            container.RegisterType(typeof(Controllers.View.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
+            c.RegisterType(typeof(Controllers.Api.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
+            c.RegisterType(typeof(Controllers.View.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
             // funny
-            container.RegisterType(typeof(Controllers.View.FunnyController), new InjectionConstructor(typeof(FunnyRepository)));
+            c.RegisterType(typeof(Controllers.Api.FunnyController), new InjectionConstructor(typeof(FunnyRepository)));
+            c.RegisterType(typeof(Controllers.View.FunnyController), new InjectionConstructor(typeof(FunnyRepository)));
         }
     }
 }
