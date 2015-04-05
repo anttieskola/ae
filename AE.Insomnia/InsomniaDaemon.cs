@@ -25,14 +25,14 @@ namespace AE.Insomnia
         /* dev */
         public const double UPDATE_INTERVAL_IN_MINUTES = 1;
         public const String API_URI = "http://localhost:65431/api/MakeRequest";
-        public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia";
+        public const String CALLBACK_URI = "http://localhost:65430/api/Insomnia/MakeRequest";
         public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 1;
         public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 1;
 #else
         /* azure */
         public const double UPDATE_INTERVAL_IN_MINUTES = 10;
         public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
-        public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia";
+        public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia/MakeRequest";
         public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 15;
         public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 45;
 #endif

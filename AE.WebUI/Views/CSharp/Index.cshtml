@@ -104,7 +104,7 @@
                 $('#divWelcome').addClass('hidden');
             }
             // load
-            $.getJSON("/api/csharp/" + id, function (response) {
+            $.getJSON("/api/csharp/snipplet/" + id, function (response) {
                 // data
                 var headline = response.Headline;
                 var content = response.Content;

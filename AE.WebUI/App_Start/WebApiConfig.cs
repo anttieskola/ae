@@ -8,14 +8,11 @@ namespace AE.WebUI
         {
             config.EnableSystemDiagnosticsTracing();
             config.MapHttpAttributeRoutes();
-            // /api/news/articles
+            // /api/mycontroller/method
+            // /api/mycontroller/method/{id}
             config.Routes.MapHttpRoute(
                 name: "ControllerActionParameter",
-                routeTemplate: "api/{controller}/{action}");
-            // /api/mpg/id
-            config.Routes.MapHttpRoute(
-                name: "ControllerParameter",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional });
         }
     }

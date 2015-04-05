@@ -18,7 +18,7 @@ namespace AE.WebUI.Controllers.Api
         #endregion
 
         [HttpGet]
-        public CSharpSnippletContentItem Get(int? id)
+        public CSharpSnippletContentItem Snipplet(int? id)
         {
             if (id == null)
             {

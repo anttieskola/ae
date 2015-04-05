@@ -30,7 +30,7 @@ namespace AE.WebUI.Controllers.Api
         }
 
         [HttpGet]
-        public VehicleFills Get(int? id)
+        public VehicleFills Fills(int? id)
         {
             if (id == null)
             {
