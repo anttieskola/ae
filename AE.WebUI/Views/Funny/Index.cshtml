@@ -5,7 +5,7 @@
 <!-- negative margin to leave no space between title well and menu -->
 <div style="margin-top: -13px;">
     <!-- previous -->
-    <div id="Previous" class="col-xs-1 carousel-control left" style="cursor: pointer; top: 50px; z-index: 1;">
+    <div id="Previous" class="col-xs-1 carousel-control left" style="cursor: pointer; top: 50px; z-index: 1; position: fixed;">
         <a role="button">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -54,13 +54,45 @@
         </div>
     </div>
     <!-- next -->
-    <div id="Next" class="col-xs-1 carousel-control right" style="cursor: pointer; top: 50px; z-index: 1;">
+    <div id="Next" class="col-xs-1 carousel-control right" style="cursor: pointer; top: 50px; z-index: 1; position: fixed;">
         <a role="button">
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
     </div>
 </div>
+
+<!-- bottom bar, for about button -->
+<nav class="navbar-fixed-bottom hidden-xs">
+    <div class="col-sm-1" style="margin-bottom: 7px;">
+        <button id="about" class="btn btn-info">About</button>
+    </div>
+</nav>
+
+<!-- about modal dialog -->
+<div class="modal fade" id="aboutModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">About funny section</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Posts are acquired from <a href="http://www.reddit.com/r/funny" target="_blank">Reddit's funny sub reddit</a> in a maintenance task ran by Quartz scheduler. First the post in parsed then we try to get a direct link to funny picture in referred in post. They are usually shared using <a href="http://www.imgur.com" target="_blank">Imgur</a>. If we succeed in that we also gather few comments for it. Then it is stored into DB, currently it will keep few hundred of these.
+                </p><p>
+                    When you click next or previous, image is first loaded and after it is ready set visible, as only the links to images are in DB.
+                </p><p>
+                    Purpose for this page was to easy and fast way browse current hottest funny posts in reddit and having a laugh, without having multiple tabs and sites opened during it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script>
         var page = 0; // current page (in api)
@@ -146,6 +178,7 @@
             $('#Previous').click(previous);
             $('#Next').click(next);
             $('#Image').click(next);
+            $('#about').click(function () { $('#aboutModal').modal('show'); });
             getMorePosts();
         });
     </script>
