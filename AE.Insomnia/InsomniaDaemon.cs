@@ -212,7 +212,7 @@ namespace AE.Insomnia
                 Debug.WriteLine("InsomniaApiRequest - Execute - Can't access api server");
                 // launch maintenance from here
                 Debug.WriteLine("InsomniaApiRequest - Execute - launching maintenance");
-                await InsomniaDaemon.Instance.Maintenance();
+                // await InsomniaDaemon.Instance.Maintenance(); // Illegal to do, but nice on development. Will fail azure deployment!
                 // making new request
                 InsomniaDaemon.Instance.Start();
             }
