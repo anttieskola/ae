@@ -56,7 +56,7 @@ namespace AE.Imgur.Utils
                                 if (end - start > 0 && end - start < 40)
                                 {
                                     string image_url = content.Substring(start, end - start);
-                                    return image_url;
+                                    return removeParameters(image_url);
                                 }
                             }
                             // <meta property="og:image" content="url" />
@@ -70,7 +70,7 @@ namespace AE.Imgur.Utils
                                 if (end - start > 0 && end - start < 40)
                                 {
                                     string image_url = content.Substring(start, end - start);
-                                    return image_url;
+                                    return removeParameters(image_url);
                                 }
                             }
                         }
@@ -82,6 +82,21 @@ namespace AE.Imgur.Utils
                 throw;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Simply if string contains ? remove that all rest
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        internal static string removeParameters(String s)
+        {
+            int q = s.IndexOf('?');
+            if (q != -1)
+            {
+                s = s.Substring(0, q);
+            }
+            return s;
         }
     }
 }

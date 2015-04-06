@@ -29,6 +29,7 @@ namespace AE.Funny.Service
         private const int MAX_COMMENTS = 3;
         private const int POST_KEEP_COUNT = 500;
         private const string FUNNY_URL = "http://www.reddit.com/r/funny.json?sort=hot";
+        private static readonly DateTime UNIX_START = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private volatile bool _running;
         private FunnyRepository _repo;
         #endregion
@@ -211,35 +212,16 @@ namespace AE.Funny.Service
             Post fp = new Post { Title = rp.Title, RedditId = rp.Id };
             
             // timestamp
-            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            fp.Created = unixStart.AddSeconds(rp.Created_Utc);
+            fp.Created = UNIX_START.AddSeconds(rp.Created_Utc);
 
             // get direct link to picture
-            if (!isPictureLink(rp.Url))
+            fp.ImageUrl = await createPictureLink(rp.Url);
+            if (fp.ImageUrl == null)
             {
-                // we can scrape to picture url from imgur
-                if (rp.Url.IndexOf("imgur", StringComparison.InvariantCultureIgnoreCase) != -1)
-                {
-                    try
-                    {
-                        fp.ImageUrl = await ImgurScraper.GetImageUrl(rp.Url);
-                    }
-                    catch (WebException we)
-                    {
-                        Debug.WriteLine(we.Message);
-                        return null;
-                    }
-                    if (fp.ImageUrl == null)
-                    {
-                        return null;
-                    }
-                }
+                // no picture => no post
+                return null;
             }
-            else
-            {
-                fp.ImageUrl = rp.Url;
-            }
-
+            
             // fetch comments
             try
             {
@@ -260,12 +242,52 @@ namespace AE.Funny.Service
 
         #region helpers
         /// <summary>
+        /// Create direct picture link from given url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        internal static async Task<string> createPictureLink(string url)
+        {
+            // is it already rdy?
+            if (isPictureLink(url))
+            {
+                return url;
+            }
+
+            // try to create direct link
+            if (url.IndexOf("imgur", StringComparison.InvariantCultureIgnoreCase) != -1)
+            {
+                // imgur
+                try
+                {
+                    url = await ImgurScraper.GetImageUrl(url);
+                }
+                catch (WebException we)
+                {
+                    // imgur scrape failed
+                    Debug.WriteLine(we.Message);
+                }
+            }
+
+            // result
+            if (isPictureLink(url))
+            {
+                return url;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Check is given url link to picture
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         internal static bool isPictureLink(string url)
         {
+            if (url == null)
+            {
+                return false;
+            }
             // Todo: add imgurs gifv when we solve display issues
             return Regex.IsMatch(url.ToLower(), @"(\.(jpg|jpeg|png|gif|gif)$)");
         }

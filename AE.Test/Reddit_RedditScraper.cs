@@ -27,8 +27,8 @@ namespace AE.Test
         public void ParseComments()
         {
             List<RedditComment> lrc = RedditScraper.ParseComments("31ho69").Result;
-            List<RedditComment> lrc = RedditScraper.ParseComments("31ixrv").Result;
-            List<RedditComment> lrc = RedditScraper.ParseComments("31iw5k").Result;
+            //List<RedditComment> lrc = RedditScraper.ParseComments("31ixrv").Result;
+            //List<RedditComment> lrc = RedditScraper.ParseComments("31iw5k").Result;
         }
     }
 }

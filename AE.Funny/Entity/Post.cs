@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AE.Funny.Entity
 {
     /// <summary>
     /// Post to make you laugh
     /// </summary>
+    [DebuggerDisplay("{PostId}, {Title}, {RedditId}")]
     public class Post
     {
         public Post()

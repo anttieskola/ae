@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace AE.Reddit.Entity
     /// <summary>
     /// Parsed from original reddit data. Not stored in DB.
     /// </summary>
+    [DebuggerDisplay("{Id}, {Title}")]
     public class RedditPost
     {
         #region properties
