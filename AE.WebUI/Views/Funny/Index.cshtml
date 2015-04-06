@@ -132,14 +132,24 @@
                     if (posts === null) {
                         // first
                         posts = res;
+                        next();
                     } else {
-                        // add
-                        posts = posts.concat(res);
+                        if (res.length != 0) {
+                            // add
+                            posts = posts.concat(res);
+                            next();
+                        } else {
+                            //  end of posts
+                            showError("Sorry, no more posts.");
+                        }
                     }
-                    next(); // open next
                 } else {
-                    showError();
+                    showError("Sorry, error loading posts. Please try to refresh page.");
                 }
+            }).fail(function () {
+                page--;
+                busy = false;
+                getMorePosts(); // try again
             });
         }
 
@@ -169,8 +179,8 @@
         }
 
         // error
-        function showError() {
-            $('#Title').text("Sorry, error loading posts. Please try to refresh page.");
+        function showError(msg) {
+            $('#Title').text(msg);
         }
 
         // doc rdy
