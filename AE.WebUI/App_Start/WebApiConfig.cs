@@ -6,7 +6,7 @@ namespace AE.WebUI
     {
         public static void Register(HttpConfiguration config)
         {
-            config.EnableSystemDiagnosticsTracing();
+            // config.EnableSystemDiagnosticsTracing(); // Don't enable if not really needed, active in relese builds.
             config.MapHttpAttributeRoutes();
             // /api/mycontroller/method
             // /api/mycontroller/method/{id}

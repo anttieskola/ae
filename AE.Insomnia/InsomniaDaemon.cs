@@ -33,8 +33,8 @@ namespace AE.Insomnia
         public const double UPDATE_INTERVAL_IN_MINUTES = 10;
         public const String API_URI = "http://aeinsomnia.azurewebsites.net/api/MakeRequest";
         public const String CALLBACK_URI = "http://anttieskola.azurewebsites.net/api/Insomnia/MakeRequest";
-        public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 15;
-        public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 45;
+        public const int NEWS_UPDATE_INTERVAL_IN_MINUTES = 9;
+        public const int FUNNY_UPDATE_INTERVAL_IN_MINUTES = 19;
 #endif
         private const String JOB_PREFIX = "ID_JOB_";
         private const String TRIGGER_PREFIX = "ID_TRIGGER_";
@@ -78,7 +78,7 @@ namespace AE.Insomnia
         /// </summary>
         public async Task Maintenance()
         {
-            Debug.WriteLine("InsomniaDaemon - Maintenance");
+            Trace.WriteLine("InsomniaDaemon - Maintenance");
             // wrap maintenance so it won't prevent us from going on
             try
             {
@@ -97,7 +97,7 @@ namespace AE.Insomnia
             }
             catch (Exception e)
             {
-                Debug.WriteLine("InsomniaDeamon - Maintenance - Fatal exception: {0}", e.Message);
+                Trace.WriteLine("InsomniaDeamon - Maintenance - Fatal exception: " + e.Message);
             }
             if (!isJobScheduled())
             {
@@ -110,7 +110,8 @@ namespace AE.Insomnia
         /// </summary>
         public void Start()
         {
-            Debug.WriteLine("InsomniaDaemon - Start");
+            Trace.WriteLine("InsomniaDaemon - Start");
+            // fire and forget
             Task.Factory.StartNew(() => Maintenance().Wait());
         }
 
@@ -121,7 +122,7 @@ namespace AE.Insomnia
         /// </summary>
         public void Stop()
         {
-            Debug.WriteLine("InsomniaDaemon - Stop");
+            Trace.WriteLine("InsomniaDaemon - Stop");
             if (_scheduler != null)
             {
                 if (_scheduler.IsStarted && !_scheduler.IsShutdown)
@@ -137,7 +138,7 @@ namespace AE.Insomnia
         /// </summary>
         private void scheduleJob()
         {
-            Debug.WriteLine("InsomniaDaemon - scheduleJob");
+            Trace.WriteLine("InsomniaDaemon - scheduleJob");
             String label = DateTime.Now.Ticks.ToString(); // required as this job is created inside other job
             IJobDetail iJob = JobBuilder.Create<InsomniaApiRequest>().WithIdentity(JOB_PREFIX + label).Build();
             ITrigger iTrigger = TriggerBuilder.Create()
@@ -153,21 +154,19 @@ namespace AE.Insomnia
         /// <returns></returns>
         private bool isJobScheduled()
         {
-            Debug.WriteLine("InsomniaDaemon - isJobScheduled");
             int count = 0;
             foreach (String group in _scheduler.GetJobGroupNames())
             {
                 foreach (JobKey jk in _scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(group)))
                 {
                     String jobName = jk.Name;
-                    Debug.WriteLine("InsomniaDaemon - isJobScheduled - job:{0}", jobName);
                     if (jobName.Contains(JOB_PREFIX))
                     {
                         count++;
                     }
                 }
             }
-            Debug.WriteLine("InsomniaDaemon - isJobScheduled - count:{0}", count);
+            Trace.WriteLine("InsomniaDaemon - isJobScheduled - count:" + count.ToString());
             if (count > 0)
             {
                 return true;
@@ -183,7 +182,7 @@ namespace AE.Insomnia
     {
         public async void Execute(IJobExecutionContext context)
         {
-            Debug.WriteLine("InsomniaApiRequest - Execute");
+            Trace.WriteLine("InsomniaApiRequest - Execute");
             try
             {
                 var req = (HttpWebRequest)WebRequest.Create(InsomniaDaemon.API_URI);
@@ -198,21 +197,18 @@ namespace AE.Insomnia
                 var res = (HttpWebResponse)await req.GetResponseAsync();
                 if (res.StatusCode != HttpStatusCode.OK)
                 {
-                    Debug.WriteLine("InsomniaApiRequest - Execute - ResponseError, StatusCode: {0}", res.StatusCode);
+                    Trace.WriteLine("InsomniaApiRequest - Execute - ResponseError, StatusCode:" +  res.StatusCode.ToString());
                 }
             }
             catch (UriFormatException)
             {
                 // invalid api uri, can't recover from this.
-                Debug.WriteLine("InsomniaApiRequest - Execute - Fatal error, invalid api url");
+                Trace.WriteLine("InsomniaApiRequest - Execute - Fatal error, invalid api url");
             }
             catch (WebException)
             {
                 // can't access server
-                Debug.WriteLine("InsomniaApiRequest - Execute - Can't access api server");
-                // launch maintenance from here
-                Debug.WriteLine("InsomniaApiRequest - Execute - launching maintenance");
-                // await InsomniaDaemon.Instance.Maintenance(); // Illegal to do, but nice on development. Will fail azure deployment!
+                Trace.WriteLine("InsomniaApiRequest - Execute - Can't access api server");
                 // making new request
                 InsomniaDaemon.Instance.Start();
             }

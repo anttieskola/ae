@@ -74,31 +74,32 @@ namespace AE.Funny.Service
         /// </summary>
         public async Task RunAsync()
         {
+            Trace.WriteLine("FunnyService, RunAsync");
             if (!_running)
             {
+                Trace.WriteLine("FunnyService, start");
                 _running = true;
-                Debug.WriteLine("FunnyService, start");
                 Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
                 try
                 {
                     fm.Inserted = await insert();
-                    Debug.WriteLine("FunnyService, insert:{0}", fm.Inserted);
+                    Trace.WriteLine("FunnyService, insert:" + fm.Inserted.ToString());
                     if (fm.Inserted > 0)
                     {
                         fm.Deleted = await delete();
-                        fm.Success = true;
-                        Debug.WriteLine("FunnyService, delete:{0}", fm.Deleted);
+                        Trace.WriteLine("FunnyService, delete:" + fm.Deleted.ToString());
                     }
+                    fm.Success = true;
                 }
                 catch (AggregateException ae)
                 {
-                    Debug.WriteLine("FunnyService, exception:{0}", ae.Message);
+                    Debug.WriteLine("FunnyService, exception:" + ae.Message);
                 }
                 fm.EndTime = DateTime.UtcNow;
                 _repo.Insert<Maintenance>(fm);
                 await _repo.CommitAsync();
-                Debug.WriteLine("FunnyService, end");
                 _running = false;
+                Trace.WriteLine("FunnyService, end");
             }
         }
 

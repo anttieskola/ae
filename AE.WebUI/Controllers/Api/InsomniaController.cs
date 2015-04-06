@@ -12,10 +12,10 @@ namespace AE.WebUI.Controllers.Api
     public class InsomniaController : ApiController
     {
         [HttpGet]
-        public async Task<HttpResponseMessage> MakeRequest()
+        public HttpResponseMessage MakeRequest()
         {
-            // todo: flood control
-            await InsomniaDaemon.Instance.Maintenance();
+            // fire and forget
+            Task.Factory.StartNew(() => InsomniaDaemon.Instance.Maintenance().Wait());
             return Request.CreateResponse(HttpStatusCode.OK);
         }
     }

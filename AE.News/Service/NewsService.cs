@@ -64,34 +64,33 @@ namespace AE.News.Service
         /// <returns></returns>
         public async Task RunAsync()
         {
+            Trace.WriteLine("NewsService, RunAsync");
             if (!_running)
             {
+                Trace.WriteLine("NewsService, start");
                 _running = true;
-                Debug.WriteLine("NewsService, start");
                 Maintenance m = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
                 try
                 {
                     m.Inserted = await insert();
-                    Debug.WriteLine("NewsService, inserted:{0}", m.Inserted);
+                    Trace.WriteLine("NewsService, inserted:" + m.Inserted.ToString());
                     if (m.Inserted > 0)
                     {
                         m.Deleted = await delete();
-                        Debug.WriteLine("NewsService, deleted:{0}", m.Deleted);
-                        m.Success = true;
+                        Trace.WriteLine("NewsService, deleted:" + m.Deleted.ToString());
                     }
-
+                    m.Success = true;
                 }
                 catch (AggregateException ae)
                 {
-                    // storing exception message for easy debugging
-                    Debug.WriteLine(ae.Message);
+                    Trace.WriteLine("NewsService, exception:" + ae.Message);
                     m.Exception = ae.Message;
                 }
                 m.EndTime = DateTime.UtcNow;
                 _repo.Insert<Maintenance>(m);
                 await _repo.CommitAsync();
-                Debug.WriteLine("NewsService, end");
                 _running = false;
+                Trace.WriteLine("NewsService, end");
             }
         }
 
