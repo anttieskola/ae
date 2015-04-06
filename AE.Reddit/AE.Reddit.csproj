@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\RedditComment.cs" />
     <Compile Include="Entity\RedditPost.cs" />
     <Compile Include="Entity\RedditPostPage.cs" />
     <Compile Include="Utils\RedditScraper.cs" />

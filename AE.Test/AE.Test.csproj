@@ -91,7 +91,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Imgur_ImgurClient.cs" />
-    <Compile Include="Reddit_PostScraper.cs" />
+    <Compile Include="Reddit_RedditScraper.cs" />
     <Compile Include="Funny_FunnyService.cs" />
     <Compile Include="Reddit_RedditPost.cs" />
     <Compile Include="News_NewsService.cs" />

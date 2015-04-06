@@ -71,14 +71,92 @@ namespace AE.Reddit.Utils
             return rpp;
         }
 
-        // Todo
-        public static async Task<List<string>> ParseComments(string urlOrId, int maxAmount)
+        /// <summary>
+        /// Parse comments from given id
+        /// 
+        /// Todo: Order problem for some yet unknown reason
+        /// when we loop the comment array the order of elements
+        /// is not same as actuall json file!!!
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static async Task<List<RedditComment>> ParseComments(string id)
         {
-            List<string> comments = new List<string>();
-            comments.Add("first.");
-            comments.Add("second.");
-            comments.Add("third.");
-            return comments;
+            List<RedditComment> comments = new List<RedditComment>();
+            string url = "http://www.reddit.com/" + id;
+            url += ".json";
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            req.Method = "GET";
+            req.Accept = "application/json";
+            req.Timeout = 3000;
+            try
+            {
+                // get response and handle result
+                using (HttpWebResponse res = (HttpWebResponse)await req.GetResponseAsync())
+                {
+                    // might be unnecessary check
+                    if (res.StatusCode == HttpStatusCode.OK)
+                    {
+                        // stream -> json readers
+                        using (StreamReader sr = new StreamReader(res.GetResponseStream()))
+                        using (JsonTextReader jtr = new JsonTextReader(sr))
+                        {
+                            // load json
+                            try
+                            {
+                                // response is array
+                                JArray arrayAll = JArray.Load(jtr);
+                                // first element is post, that is ignored
+                                // second element is comments
+                                JToken rootToken = arrayAll[1];
+                                getComments(ref comments, rootToken);
+                                return comments;
+                            }
+                            catch (JsonReaderException jre)
+                            {
+                                Debug.WriteLine(jre.Message);
+                                throw new WebException("ParseComments, invalid data in response from " + url);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (WebException)
+            {
+                // Todo: could remove try as we don't handle exception...
+                throw;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gather recursively comments from given comment element
+        /// </summary>
+        /// <param name="comments"></param>
+        /// <param name="comment"></param>
+        private static void getComments(ref List<RedditComment> comments, JToken comment)
+        {
+            // array of comments on current level
+            JArray commentArray = (JArray)comment["data"]["children"];
+            foreach (JToken c in commentArray)
+            {
+                // check this is actual comment
+                if(c["data"]["body"] == null )
+                {
+                    continue;
+                }
+                // add each
+                comments.Add(c["data"].ToObject<RedditComment>());
+                // check if any have replies
+                JToken replies = c["data"]["replies"];
+                if (replies != null && replies.Type == JTokenType.Object)
+                {
+                    // recursion
+                    getComments(ref comments, replies);
+                }
+            }
         }
     }
 }

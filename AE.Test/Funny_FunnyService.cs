@@ -17,22 +17,6 @@ namespace AE.Test
         }
 
         [TestMethod]
-        public void fetchPostsMT()
-        {
-            FunnyService fs = FunnyService.Instance;
-            List<Post> fps = fs.fetchPostsMT().Result;
-            Assert.AreNotEqual(0, fps.Count);
-        }
-
-        [TestMethod]
-        public void fetchPostsST()
-        {
-            FunnyService fs = FunnyService.Instance;
-            List<Post> fps = fs.fetchPostsST().Result;
-            Assert.AreNotEqual(0, fps.Count);
-        }
-
-        [TestMethod]
         public void IsPictureLink()
         {
             Assert.IsTrue(FunnyService.isPictureLink("http://kfodksf/something.jpg"));

@@ -17,7 +17,7 @@ namespace AE.Reddit.Entity
         public string Title { get; set; }
         public string Url { get; set; }
         public string Permalink { get; set; }
-        public float Created_Utc { get; set; }
+        public double Created_Utc { get; set; }
         #endregion
 
         #region comparison overloads

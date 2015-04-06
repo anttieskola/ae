@@ -24,10 +24,10 @@ namespace AE.Funny.Service
     public class FunnyService
     {
         #region fields
-        private const int PAGE_COUNT = 4;
+        private const int POST_FETCH_LIMIT = 100;
         private const int MAX_TASKS = 10;
         private const int MAX_COMMENTS = 3;
-        private const int POST_KEEP_COUNT = 100;
+        private const int POST_KEEP_COUNT = 500;
         private const string FUNNY_URL = "http://www.reddit.com/r/funny.json?sort=hot";
         private volatile bool _running;
         private FunnyRepository _repo;
@@ -171,24 +171,17 @@ namespace AE.Funny.Service
         /// <returns>List or null in case of errors</returns>
         internal async Task<List<Post>> fetchPosts()
         {
-            // Todo: if page parameter someday works could be made faster as no need for after token
-            // scrape pages, can't do in paraller as require the after token to get next page
-            List<RedditPost> rpList = new List<RedditPost>();
-            string after = "";
-            for (int currentPage = 1; currentPage <= PAGE_COUNT; currentPage++)
+            // fetch posts (amount of limit set)
+            HashSet<RedditPost> rpList;
+            try
             {
-                string pageUrl = FUNNY_URL + after;
-                try
-                {
-                    RedditPostPage rpp = await RedditScraper.ParsePosts(pageUrl);
-                    after = "&after=" + rpp.After; // set after to get next page of posts
-                    rpList.AddRange(rpp.Posts);
-                }
-                catch (WebException we)
-                {
-                    Debug.WriteLine(we.Message);
-                    return null;
-                }
+                RedditPostPage rpp = await RedditScraper.ParsePosts(FUNNY_URL + "&limit=" + POST_FETCH_LIMIT);
+                rpList = rpp.Posts;
+            }
+            catch (WebException we)
+            {
+                Debug.WriteLine(we.Message);
+                return null;
             }
 
             // convert reddit posts into funnyposts
@@ -208,104 +201,6 @@ namespace AE.Funny.Service
         }
 
         /// <summary>
-        /// Not in use
-        /// </summary>
-        /// <returns></returns>
-        internal async Task<List<Post>> fetchPostsMT()
-        {
-            // Todo: if page parameter someday works could be made faster as no need for after token
-            // scrape pages, can't do in paraller as require the after token to get next page
-            List<RedditPost> rpList = new List<RedditPost>();
-            string after = "";
-            for (int currentPage = 1; currentPage <= PAGE_COUNT; currentPage++)
-            {
-                string pageUrl = FUNNY_URL + after;
-                try
-                {
-                    RedditPostPage rpp = await RedditScraper.ParsePosts(pageUrl);
-                    after = "&after=" + rpp.After; // set after to get next page of posts
-                    rpList.AddRange(rpp.Posts);
-                }
-                catch (WebException we)
-                {
-                    Debug.WriteLine(we.Message);
-                    return null;
-                }
-            }
-
-            // convert reddit posts into funnyposts
-            ConcurrentStack<Post> fpStack = new ConcurrentStack<Post>();
-            int dclBackup = ServicePointManager.DefaultConnectionLimit;
-            ServicePointManager.DefaultConnectionLimit = MAX_TASKS;
-            Task[] cfpTasks = new Task[MAX_TASKS];
-            for (int rpIndex = 0; rpIndex < rpList.Count; /* note, no increment here*/)
-            {
-                // launch tasks
-                for (int taskIndex = 0; taskIndex < MAX_TASKS; taskIndex++)
-                {
-                    // post is passed as parameter for task
-                    cfpTasks[taskIndex] = Task.Factory.StartNew((rp) =>
-                    {
-                        Post fp = createFunnyPost((RedditPost)rp).Result;
-                        if (fp != null)
-                        {
-                            fpStack.Push(fp);
-                        }
-                    }, rpList[rpIndex]);
-                    // increment post array index
-                    rpIndex++;
-                    // break if all posts are processing
-                    if (rpIndex >= rpList.Count)
-                    {
-                        break;
-                    }
-                }
-                Task.WaitAll(cfpTasks); // wait for tasks to complete
-            }
-            ServicePointManager.DefaultConnectionLimit = dclBackup;
-            return new List<Post>(fpStack);
-        }
-
-        /// <summary>
-        /// Not in use
-        /// </summary>
-        /// <returns></returns>
-        internal async Task<List<Post>> fetchPostsST()
-        {
-            // Todo: if page argument someday works could be made faster
-            // scrape pages, can't do in paraller as require the after token to get next page
-            List<RedditPost> rpList = new List<RedditPost>();
-            string after = "";
-            for (int currentPage = 1; currentPage <= PAGE_COUNT; currentPage++)
-            {
-                string pageUrl = FUNNY_URL + after;
-                try
-                {
-                    RedditPostPage rpp = await RedditScraper.ParsePosts(pageUrl);
-                    after = "&after=" + rpp.After; // set after to get next page of posts
-                    rpList.AddRange(rpp.Posts);
-                }
-                catch (WebException we)
-                {
-                    Debug.WriteLine(we.Message);
-                    return null;
-                }
-            }
-
-            // convert reddit posts into funnyposts
-            List<Post> fpList = new List<Post>();
-            foreach (RedditPost rp in rpList)
-            {
-                Post fp = createFunnyPost(rp).Result;
-                if (fp != null)
-                {
-                    fpList.Add(fp);
-                }
-            }
-            return fpList;
-        }
-
-        /// <summary>
         /// Create funny post from reddit post
         /// </summary>
         /// <param name="rp"></param>
@@ -314,6 +209,10 @@ namespace AE.Funny.Service
         {
             // funny post
             Post fp = new Post { Title = rp.Title, RedditId = rp.Id };
+            
+            // timestamp
+            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            fp.Created = unixStart.AddSeconds(rp.Created_Utc);
 
             // get direct link to picture
             if (!isPictureLink(rp.Url))
@@ -344,10 +243,11 @@ namespace AE.Funny.Service
             // fetch comments
             try
             {
-                List<string> comments = await RedditScraper.ParseComments(fp.RedditId, 3);
-                foreach (string comment in comments)
+                List<RedditComment> comments = await RedditScraper.ParseComments(fp.RedditId);
+                // take 3 first comments to be added into db
+                foreach (RedditComment comment in comments.Take(3))
                 {
-                    fp.Comments.Add(new Comment { Text = comment });
+                    fp.Comments.Add(new Comment { Text = comment.Body });
                 }
             }
             catch (WebException we)
@@ -355,9 +255,6 @@ namespace AE.Funny.Service
                 // comments are not crucial, so we just forget them in case of error
                 Debug.WriteLine(we.Message);
             }
-
-            // stamp our post
-            fp.Created = DateTime.UtcNow;
             return fp;
         }
 
@@ -369,7 +266,8 @@ namespace AE.Funny.Service
         /// <returns></returns>
         internal static bool isPictureLink(string url)
         {
-            return Regex.IsMatch(url.ToLower(), @"(\.(jpg|jpeg|png|gif|gifv)$)");
+            // Todo: add imgurs gifv when we solve display issues
+            return Regex.IsMatch(url.ToLower(), @"(\.(jpg|jpeg|png|gif|gif)$)");
         }
         #endregion
     }
