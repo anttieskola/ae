@@ -1,4 +1,5 @@
 ﻿using AE.EF.Abstract;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,13 +36,18 @@ namespace AE.EF.Dal
 
         public virtual void Delete<SetType>(SetType t) where SetType : class
         {
-            _db.Entry(t).State = EntityState.Deleted;
+            _db.Set<SetType>().Remove(t);
+        }
+
+        public virtual void Delete<SetType>(List<SetType> ls) where SetType : class
+        {
+            _db.Set<SetType>().RemoveRange(ls);
         }
 
         public virtual void Delete<SetType>(int id) where SetType : class
         {
             SetType st = _db.Set<SetType>().Find(id);
-            _db.Entry(st).State = EntityState.Deleted;
+            _db.Set<SetType>().Remove(st);
         }
         #endregion
 
