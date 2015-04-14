@@ -69,7 +69,9 @@ namespace AE.News.Service
             {
                 Trace.WriteLine("NewsService, start");
                 _running = true;
-                Maintenance m = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
+                Maintenance m = new Maintenance { StartTime = DateTime.UtcNow, EndTime = DateTime.MaxValue, Success = false };
+                _repo.Insert<Maintenance>(m);
+                await _repo.CommitAsync();
                 try
                 {
                     m.Inserted = await insert();
@@ -81,13 +83,13 @@ namespace AE.News.Service
                     }
                     m.Success = true;
                 }
-                catch (AggregateException ae)
+                catch (Exception e)
                 {
-                    Trace.WriteLine("NewsService, exception:" + ae.Message);
-                    m.Exception = ae.Message;
+                    Trace.WriteLine("NewsService, exception:" + e.Message);
+                    m.Exception = e.Message;
                 }
                 m.EndTime = DateTime.UtcNow;
-                _repo.Insert<Maintenance>(m);
+                _repo.Update<Maintenance>(m);
                 await _repo.CommitAsync();
                 _running = false;
                 Trace.WriteLine("NewsService, end");

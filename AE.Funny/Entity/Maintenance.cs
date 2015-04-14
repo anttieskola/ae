@@ -10,5 +10,6 @@ namespace AE.Funny.Entity
         public DateTime EndTime { get; set; }
         public int Inserted { get; set; }
         public int Deleted { get; set; }
+        public string Exception { get; set; }
     }
 }

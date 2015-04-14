@@ -79,24 +79,27 @@ namespace AE.Funny.Service
             {
                 Trace.WriteLine("FunnyService, start");
                 _running = true;
-                Maintenance fm = new Maintenance { StartTime = DateTime.UtcNow, Success = false };
+                Maintenance m = new Maintenance { StartTime = DateTime.UtcNow, EndTime = DateTime.MaxValue, Success = false };
+                _repo.Insert<Maintenance>(m);
+                await _repo.CommitAsync();
                 try
                 {
-                    fm.Inserted = await insert();
-                    Trace.WriteLine("FunnyService, insert:" + fm.Inserted.ToString());
-                    if (fm.Inserted > 0)
+                    m.Inserted = await insert();
+                    Trace.WriteLine("FunnyService, insert:" + m.Inserted.ToString());
+                    if (m.Inserted > 0)
                     {
-                        fm.Deleted = await delete();
-                        Trace.WriteLine("FunnyService, delete:" + fm.Deleted.ToString());
+                        m.Deleted = await delete();
+                        Trace.WriteLine("FunnyService, delete:" + m.Deleted.ToString());
                     }
-                    fm.Success = true;
+                    m.Success = true;
                 }
-                catch (AggregateException ae)
+                catch (Exception e)
                 {
-                    Debug.WriteLine("FunnyService, exception:" + ae.Message);
+                    Trace.WriteLine("FunnyService, exception:" + e.Message);
+                    m.Exception = e.Message;
                 }
-                fm.EndTime = DateTime.UtcNow;
-                _repo.Insert<Maintenance>(fm);
+                m.EndTime = DateTime.UtcNow;
+                _repo.Update<Maintenance>(m);
                 await _repo.CommitAsync();
                 _running = false;
                 Trace.WriteLine("FunnyService, end");
