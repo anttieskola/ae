@@ -153,6 +153,7 @@
         var moreArticles = false;
         var articleTemplate = null;
         var articleTemplatePicture = null;
+        var loading = false;
 
         // article show/hide
         function expandArticle(element) {
@@ -200,48 +201,55 @@
 
         // add articles
         function addArticles() {
-            // next page
-            currentPage++;
-            // build url with tag and page
-            var articlesUrl = "/api/news/articles?";
-            // 0 tag is added separetely at top, without tag we get all articles
-            if (currentTag !== '0') {
-                articlesUrl += "tag=" + currentTag + "&";
-            }
-            articlesUrl += "page=" + currentPage;
-            $.getJSON(articlesUrl, function (response) {
-                $('#loading').hide(); // hide loading
-                // check response is array
-                if (Object.prototype.toString.call(response) === '[object Array]') {
-                    // loop thru articles
-                    for (var i = 0; i < response.length; i++) {
-                        var article;
-                        // template with image or no?
-                        if (response[i].ImageUrl != null) {
-                            article = articleTemplatePicture.clone();
-                            article.find('.articlePicture').attr("src", response[i].ImageUrl);
-                        } else {
-                            article = articleTemplate.clone();
-                        }
-                        // add content
-                        article.find('.articleTitle').text(response[i].Title);
-                        article.find('.articleDescription').text(response[i].Description);
-                        article.find('.articleContent').html(response[i].Content);
-                        article.find('.articleDate').html(formatSqlDateString(response[i].Date));
-                        article.find('.articleSource').attr("href", response[i].SourceUrl);
-                        article.find('.articleReadingView').attr("href", '/news/readingview/' + response[i].Id);
-                        article.children('.news-content').hide();
-                        // add filled template to articles
-                        article.appendTo('#articles');
-                    }
-                    // are there any more articles?
-                    if (response.length == 0) {
-                        moreArticles = false;
-                    }
-                } else {
-                    $('#articles').html("<p>Sorry, error occured loading articles please try refreshing page.</p>");
+            if (loading === false) {
+                // loading lock so just one at a time
+                loading = true;
+                // next page
+                currentPage++;
+                // build url with tag and page
+                var articlesUrl = "/api/news/articles?";
+                // 0 tag is added separetely at top, without tag we get all articles
+                if (currentTag !== '0') {
+                    articlesUrl += "tag=" + currentTag + "&";
                 }
-            });
+                articlesUrl += "page=" + currentPage;
+                $.getJSON(articlesUrl, function (response) {
+                    $('#loading').hide(); // hide loading
+                    // check response is array
+                    if (Object.prototype.toString.call(response) === '[object Array]') {
+                        // loop thru articles
+                        for (var i = 0; i < response.length; i++) {
+                            var article;
+                            // template with image or no?
+                            if (response[i].ImageUrl != null) {
+                                article = articleTemplatePicture.clone();
+                                article.find('.articlePicture').attr("src", response[i].ImageUrl);
+                            } else {
+                                article = articleTemplate.clone();
+                            }
+                            // add content
+                            article.find('.articleTitle').text(response[i].Title);
+                            article.find('.articleDescription').text(response[i].Description);
+                            article.find('.articleContent').html(response[i].Content);
+                            article.find('.articleDate').html(formatSqlDateString(response[i].Date));
+                            article.find('.articleSource').attr("href", response[i].SourceUrl);
+                            article.find('.articleReadingView').attr("href", '/news/readingview/' + response[i].Id);
+                            article.children('.news-content').hide();
+                            // add filled template to articles
+                            article.appendTo('#articles');
+                        }
+                        // are there any more articles?
+                        if (response.length == 0) {
+                            moreArticles = false;
+                        }
+                    } else {
+                        $('#articles').html("<p>Sorry, error occured loading articles please try refreshing page.</p>");
+                    }
+                }).always(function () {
+                    // release loading lock
+                    loading = false;
+                });
+            }
         }
 
         function formatSqlDateString(sqlDateString) {
