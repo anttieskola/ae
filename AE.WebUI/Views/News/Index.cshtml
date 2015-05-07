@@ -225,11 +225,13 @@
             if (loading === false) {
                 // loading lock so just one at a time
                 loading = true;
-                // show spinner at bottom
-                $('#loadingMore').show();
                 // next page
                 currentPage++;
-                // build url with tag and page
+                // show spinner at bottom when loading additional pages
+                if (currentPage != 1) {
+                    $('#loadingMore').show();
+                }
+                // build url with ta g and page
                 var articlesUrl = "/api/news/articles?";
                 // 0 tag is added separetely at top, without tag we get all articles
                 if (currentTag !== '0') {
