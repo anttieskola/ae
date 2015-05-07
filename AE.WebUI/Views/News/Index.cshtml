@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-6" style="cursor: pointer;" onclick="expandArticle(this);">
-            <img src="~/Images/articleDummy.jpg" width="265" height="149" class="articlePicture" style="margin-top: 10px;"/>
+            <img src="~/Images/articleDummy.jpg" width="265" height="149" class="articlePicture" style="margin-top: 10px;" />
         </div>
         <div class="col-xs-12 col-sm-6" style="margin-top: 7px;">
             <p class="articleDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -145,7 +145,28 @@
             <h6 style="text-align: right;" class="articleDate">14:43 23.4.2015</h6>
         </div>
     </article>
-
+</div>
+<!-- spinner to show when loading more articles -->
+<div id="loadingMore" class="row" style="display: none;">
+    <div id="circularG" class="center-block">
+        <div id="circularG_1" class="circularG">
+        </div>
+        <div id="circularG_2" class="circularG">
+        </div>
+        <div id="circularG_3" class="circularG">
+        </div>
+        <div id="circularG_4" class="circularG">
+        </div>
+        <div id="circularG_5" class="circularG">
+        </div>
+        <div id="circularG_6" class="circularG">
+        </div>
+        <div id="circularG_7" class="circularG">
+        </div>
+        <div id="circularG_8" class="circularG">
+        </div>
+    </div>
+</div>
 @section scripts {
     <script>
         var currentPage = 1;
@@ -204,6 +225,8 @@
             if (loading === false) {
                 // loading lock so just one at a time
                 loading = true;
+                // show spinner at bottom
+                $('#loadingMore').show();
                 // next page
                 currentPage++;
                 // build url with tag and page
@@ -248,6 +271,8 @@
                 }).always(function () {
                     // release loading lock
                     loading = false;
+                    // hide loading more
+                    $('#loadingMore').hide();
                 });
             }
         }
@@ -264,7 +289,7 @@
         // "infinite scroll"
         $(window).scroll(function () {
             // one article row is around 250
-            if (($(window).scrollTop() + 250)>= $(document).height() - $(window).height()) {
+            if (($(window).scrollTop() + 250) >= $(document).height() - $(window).height()) {
                 if (moreArticles) {
                     addArticles();
                 }
