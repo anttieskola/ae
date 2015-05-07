@@ -44,7 +44,6 @@ namespace AE.News.Migrations
                 {
                     new Feed { Tag = new Tag { Name = "In English"}, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=news" },
                     new Feed { Tag = new Tag { Name = "In P‰‰uutiset"}, Url = "http://yle.fi/uutiset/rss/paauutiset.rss" },
-                    new Feed { Tag = new Tag { Name = "Uusimmat" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss" },
                     new Feed { Tag = new Tag { Name = "Kotimaa" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=kotimaa" },
                     new Feed { Tag = new Tag { Name = "Ulkomaat" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=ulkomaat" },
                     new Feed { Tag = new Tag { Name = "Talous" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=talous" },
@@ -63,7 +62,8 @@ namespace AE.News.Migrations
                     new Feed { Tag = new Tag { Name = "Blogit" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=Blogi" },
                     new Feed { Tag = new Tag { Name = "Oulu" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=oulu" },
                     new Feed { Tag = new Tag { Name = "Per‰meri" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=perameri" },
-                    new Feed { Tag = new Tag { Name = "Lappi" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=lappi" }
+                    new Feed { Tag = new Tag { Name = "Lappi" }, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=lappi" },
+                    new Feed { Tag = new Tag { Name = "Keski-Pohjanmaa"}, Url = "http://yle.fi/uutiset/rss/uutiset.rss?osasto=keski-pohjanmaa" }
                 };
             }
         }
