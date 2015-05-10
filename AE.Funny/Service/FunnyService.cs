@@ -212,6 +212,12 @@ namespace AE.Funny.Service
         /// <returns>Post or null in case of error</returns>
         internal static async Task<Post> createFunnyPost(RedditPost rp)
         {
+            // nsfw check
+            if (rp.Title.IndexOf("nsfw", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return null;
+            }
+
             // funny post
             Post fp = new Post { Title = rp.Title, RedditId = rp.Id };
             
