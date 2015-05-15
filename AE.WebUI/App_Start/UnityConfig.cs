@@ -47,6 +47,7 @@ namespace AE.WebUI.App_Start
             // news
             c.RegisterType(typeof(Controllers.Api.NewsController), new InjectionConstructor(typeof(NewsRepository)));
             c.RegisterType(typeof(Controllers.View.NewsController), new InjectionConstructor(typeof(NewsRepository)));
+            c.RegisterType(typeof(Controllers.View.NewsAdminController), new InjectionConstructor(typeof(NewsRepository)));
             // snipplet
             c.RegisterType(typeof(Controllers.Api.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));
             c.RegisterType(typeof(Controllers.View.CSharpController), new InjectionConstructor(typeof(SnippletRepository)));

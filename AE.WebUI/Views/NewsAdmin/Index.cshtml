@@ -1,0 +1,61 @@
+﻿@using AE.WebUI.ViewModels
+@model NewsAdminViewModel
+
+@{
+    ViewBag.Title = "News status";
+}
+
+<h2>Index</h2>
+
+@if (Model.Maintenances.Count > 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().Success)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().Exception)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().Inserted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Maintenances.First().Deleted)
+            </th>
+        </tr>
+        @foreach (var item in Model.Maintenances)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Success)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exception)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inserted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deleted)
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{ 
+    <p>Oh darn someone has been sloppy no maintenances ran.</p>
+}

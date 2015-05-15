@@ -5,10 +5,10 @@
 <!-- bottom bar -->
 <nav class="navbar-fixed-bottom">
     <!-- about button-->
-    <div class="hidden-xs hidden-sm col-md-3 col-lg-5">
+    <div class="hidden-xs hidden-sm col-md-2 col-lg-2 text-left">
         <button id="about" class="btn btn-info">About</button>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-7">
+    <div class="col-xs-12 col-sm-12 col-md-8u col-lg-8 text-center">
         <!-- tag selection -->
         <form class="form-inline" role="form">
             <div class="input-group">
@@ -19,6 +19,14 @@
             </div>
         </form>
     </div>
+    @if (Request.IsAuthenticated)
+    {
+        <div class="hidden-xs hidden-sm col-md-2 col-lg-2 text-right">
+            <button class="btn btn-default btn-info"
+                    onclick="location.href='@Url.Action("Index", "NewsAdmin")'"
+                >Status</button>
+        </div>
+    }
 </nav>
 
 <!-- about modal dialog -->
@@ -201,10 +209,10 @@
                 if (Object.prototype.toString.call(response) === '[object Array]') {
                     // tag select element
                     var tagSelect = $('#selectTag');
+                    $('<option value="0">Everything</option>').appendTo(tagSelect);
                     for (var i = 0; i < response.length; i++) {
                         $('<option/>', { value: response[i].Id, text: response[i].Name }).appendTo(tagSelect);
                     }
-                    $('<option value="0">Everything</option>').appendTo(tagSelect);
                     selectTagChange(); // trigger (causes first tag's news to be loaded in during page load)
                 }
             });

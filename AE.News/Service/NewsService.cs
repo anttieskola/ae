@@ -18,7 +18,7 @@ namespace AE.News.Service
         #region fields
         private NewsRepository _repo;
         private readonly int MAX_TASKS = 10;
-        private readonly int MAX_ARTICLE_AGE_IN_DAYS = 180;
+        private readonly int MAX_ARTICLE_AGE_IN_DAYS = 360;
         private volatile bool _running;
         #endregion
 

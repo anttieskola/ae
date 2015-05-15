@@ -248,6 +248,7 @@
     <Content Include="Views\Account\Message.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Funny\Index.cshtml" />
+    <Content Include="Views\NewsAdmin\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -284,6 +285,7 @@
     <Compile Include="Controllers\View\MpgAdminController.cs" />
     <Compile Include="Controllers\Api\MpgController.cs" />
     <Compile Include="Controllers\View\MpgController.cs" />
+    <Compile Include="Controllers\View\NewsAdminController.cs" />
     <Compile Include="Controllers\View\NewsController.cs" />
     <Compile Include="Filters\MinificationStream.cs" />
     <Compile Include="Global.asax.cs">
@@ -296,6 +298,7 @@
     <Compile Include="ViewModels\MpgAdminViewModels.cs" />
     <Compile Include="ViewModels\MpgApiModels.cs" />
     <Compile Include="ViewModels\MpgViewModel.cs" />
+    <Compile Include="ViewModels\NewsAdminViewModel.cs" />
     <Compile Include="ViewModels\NewsViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
