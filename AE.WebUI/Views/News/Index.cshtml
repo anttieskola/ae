@@ -3,30 +3,46 @@
 }
 
 <!-- bottom bar -->
-<nav class="navbar-fixed-bottom">
-    <!-- about button-->
-    <div class="hidden-xs hidden-sm col-md-2 col-lg-2 text-left">
-        <button id="about" class="btn btn-info">About</button>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-8u col-lg-8 text-center">
-        <!-- tag selection -->
-        <form class="form-inline" role="form">
-            <div class="input-group">
-                <label for="source" class="input-group-addon my-form-control">Category</label>
-                <select id="selectTag" class="my-form-control">
-                    <!-- options added in load -->
-                </select>
-            </div>
+<nav class="navbar-fixed-bottom news-navbar" padding-top: 5px;">
+    <div class="row news-navbar-row">
+        <!-- search dialog -->
+        <div class="col-md-1 col-lg-1"></div>
+        <form id="searchForm" class="text-center" role="form" style="display:none;">
+            <label class="hidden-xs col-sm-3 col-md-2 col-lg-4">Search</label>
+            <input class="col-xs-12 col-sm-5 col-md-5 col-lg-4" type="text" placeholder="anything..." />
         </form>
     </div>
-    @if (Request.IsAuthenticated)
-    {
-        <div class="hidden-xs hidden-sm col-md-2 col-lg-2 text-right">
-            <button class="btn btn-default btn-info"
-                    onclick="location.href='@Url.Action("Index", "NewsAdmin")'"
-                >Status</button>
+    <div class="row news-navbar-row">
+        <!-- about button-->
+        <div class="hidden-xs hidden-sm col-md-1 col-lg-1">
+            <button id="about" class="btn btn-info">About</button>
         </div>
-    }
+        <!-- tag selection -->
+        <div>
+            <!-- tag selection -->
+            <form class="form-inline" role="form">
+                <label class="hidden-xs col-sm-3 col-md-2 col-lg-4" for="source">Category</label>
+                <select class="col-xs-12 col-sm-5 col-md-5 col-lg-4" id="selectTag">
+                    <!-- options added in load -->
+                </select>
+            </form>
+        </div> 
+        <div class="hidden-xs col-sm-4 col-md-3 col-lg-2 text-center">
+            <button id="buttonSearchForm" class="btn btn-info"
+                    onclick="searchToggle()">
+                Enable <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+        @if (Request.IsAuthenticated)
+        {
+            <div class="hidden-xs hidden-sm col-md-1 col-lg-1">
+                <button class="btn btn-info"
+                        onclick="location.href='@Url.Action("Index", "NewsAdmin")'">
+                    Status
+                </button>
+            </div>
+        }
+    </div>
 </nav>
 
 <!-- about modal dialog -->
@@ -183,6 +199,19 @@
         var articleTemplate = null;
         var articleTemplatePicture = null;
         var loading = false;
+
+        // search toggle
+        function searchToggle() {
+            event.preventDefault();
+            var sf = $('#searchForm');
+            if (sf.css('display') === 'none') {
+                $('#buttonSearchForm').html('Disable <span class="glyphicon glyphicon-search"></span>');
+                sf.show();
+            } else {
+                sf.hide();
+                $('#buttonSearchForm').html('Enable <span class="glyphicon glyphicon-search"></span>');
+            }
+        }
 
         // article show/hide
         function expandArticle(element) {

@@ -19,22 +19,51 @@ textarea {
     max-width: 280px;
 }
 
-.my-form-control {
+.news-navbar
+{
+    padding-top: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.news-navbar div
+{
+    padding: 0;
+}
+.news-navbar-row
+{
+    margin-left: 25px;
+}
+.news-navbar select,
+.news-navbar input,
+.news-navbar label,
+.news-navbar button{
     display: table-cell;
     height: 45px;
-    padding: 12px 16px;
+    padding: 5px 5px 5px 5px;
     font-size: 14px;
-    line-height: 1.42857143;
+    line-height: 1.5;
+}
+.news-navbar select,
+.news-navbar input,
+.news-navbar label
+{
     color: #3e3f3a;
-    background-color: #ffffff;
     background-image: none;
+    text-align: right;
     border: 1px solid #dfd7ca;
     border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    line-height: 2.5;
 }
-
-
+.news-navbar label
+{
+    color: #fff;
+    font-weight: bold;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+}
+.news-navbar input
+{
+    text-align: left;
+    padding-left: 10px;
+}
